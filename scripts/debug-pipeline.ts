@@ -10,13 +10,18 @@ async function main() {
   console.log("Running orchestrator for query:", query);
 
   const response = await runLegalAssessment(query, []);
+  if ('isBlocked' in response && response.isBlocked) {
+    console.error("Blocked by Security Gateway:", response.reason);
+    return;
+  }
   if ('error' in response) {
     console.error("Error from pipeline:", response.error);
     return;
   }
 
+  const success = response as any;
   console.log("\n--- Pipeline Response Actions Checklist ---");
-  console.log(response.actions.checklist);
+  console.log(success.actions.checklist);
 
   const initialChecklist: CaseChecklistItem[] = [
     { id: 'chk-n-1', label: 'Written Lease/Purchase/Employment Agreement', checked: false },
@@ -26,7 +31,7 @@ async function main() {
   ];
 
   // Simulate how mappedChecklist is built in hooks/use-chats.tsx
-  const mappedChecklist = response.actions.checklist.map((label, idx) => {
+  const mappedChecklist = success.actions.checklist.map((label: string, idx: number) => {
     const existing = initialChecklist.find(
       (item) => item.label.toLowerCase() === label.toLowerCase()
     );
@@ -41,7 +46,7 @@ async function main() {
   console.log(mappedChecklist);
 
   const mockUserMsg: Message = { id: '1', role: 'user', content: query, timestamp: '10:00 AM' };
-  const mockAssistantMsg: Message = { id: '2', role: 'assistant', content: response.advice.text, timestamp: '10:01 AM' };
+  const mockAssistantMsg: Message = { id: '2', role: 'assistant', content: success.advice.text, timestamp: '10:01 AM' };
   const allMsgs = [mockUserMsg, mockAssistantMsg];
 
   const verified = autoVerifyChecklistAndScore(allMsgs, mappedChecklist);

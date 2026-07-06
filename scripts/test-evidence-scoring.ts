@@ -26,8 +26,8 @@ console.log("Risk Level:", result.caseStrength.riskLevel);
 console.log("Checked items count:", result.checklist.filter(item => item.checked).length);
 
 // Assertions
-if (result.caseStrength.score !== 85) {
-  console.error("Test failed: Score should be 85%, got", result.caseStrength.score);
+if (result.caseStrength.score !== 95) {
+  console.error("Test failed: Score should be 95%, got", result.caseStrength.score);
   process.exit(1);
 }
 

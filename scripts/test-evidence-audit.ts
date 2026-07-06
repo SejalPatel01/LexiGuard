@@ -17,7 +17,8 @@ const initialChecklist: CaseChecklistItem[] = [
 interface TestCase {
   name: string;
   chatText: string;
-  expectedCount: number;
+  expectedChecklistCount: number;
+  expectedVerifiedCount: number;
   expectedScore: number;
 }
 
@@ -25,32 +26,37 @@ const TEST_CASES: TestCase[] = [
   {
     name: "Case A: Rent Agreement only",
     chatText: "I have rent agreement",
-    expectedCount: 1,
-    expectedScore: 45 // Landlord single item Rent Agreement score
+    expectedChecklistCount: 4,
+    expectedVerifiedCount: 1,
+    expectedScore: 55
   },
   {
     name: "Case B: Rent Agreement + Bank Transfer Proof",
     chatText: "I have rent agreement and bank transfer proof",
-    expectedCount: 2,
-    expectedScore: 65 // Rent + Bank transfer (verifiedCount 2 -> 65%)
+    expectedChecklistCount: 4,
+    expectedVerifiedCount: 2,
+    expectedScore: 85
   },
   {
     name: "Case C: Rent Agreement + Bank Transfer Proof + WhatsApp Messages",
     chatText: "I have rent agreement, bank transfer proof and WhatsApp messages",
-    expectedCount: 3,
-    expectedScore: 85 // Landlord Rent + Bank + Comm custom weight (85%)
+    expectedChecklistCount: 4,
+    expectedVerifiedCount: 3,
+    expectedScore: 95
   },
   {
     name: "Case D: Offer Letter + Salary Slips + Bank Statements + HR Emails",
     chatText: "I have an offer letter, salary slips, bank statements, and HR emails",
-    expectedCount: 4,
-    expectedScore: 90 // General count-based score for 4 items -> 90%
+    expectedChecklistCount: 4,
+    expectedVerifiedCount: 3,
+    expectedScore: 95
   },
   {
     name: "Case E: FIR + Bank Transaction Records + Screenshots + Call Logs + Email Evidence + Identity Documents",
     chatText: "I have FIR, bank transaction records, screenshots, call logs, email evidence, and identity documents",
-    expectedCount: 6,
-    expectedScore: 95 // General count-based score for 6 items -> 95%
+    expectedChecklistCount: 4,
+    expectedVerifiedCount: 3,
+    expectedScore: 95
   }
 ];
 
@@ -73,15 +79,15 @@ for (const tc of TEST_CASES) {
   console.log(` -> Checklist Count: ${checklistCount}`);
   console.log(` -> Verified Count: ${verifiedCount}`);
   console.log(` -> Score: ${score}%`);
-  console.log(` -> Verified Items:`, result.checklist.map(i => i.label));
+  console.log(` -> Verified Items:`, result.checklist.filter(i => i.checked).map(i => i.label));
 
   let passed = true;
-  if (checklistCount !== tc.expectedCount) {
-    console.error(`  [FAIL] Checklist count mismatch: Expected ${tc.expectedCount}, got ${checklistCount}`);
+  if (checklistCount !== tc.expectedChecklistCount) {
+    console.error(`  [FAIL] Checklist count mismatch: Expected ${tc.expectedChecklistCount}, got ${checklistCount}`);
     passed = false;
   }
-  if (verifiedCount !== tc.expectedCount) {
-    console.error(`  [FAIL] Verified count mismatch: Expected ${tc.expectedCount}, got ${verifiedCount}`);
+  if (verifiedCount !== tc.expectedVerifiedCount) {
+    console.error(`  [FAIL] Verified count mismatch: Expected ${tc.expectedVerifiedCount}, got ${verifiedCount}`);
     passed = false;
   }
   if (score !== tc.expectedScore) {

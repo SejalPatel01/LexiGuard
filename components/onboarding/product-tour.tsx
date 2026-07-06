@@ -11,6 +11,7 @@ interface ProductTourProps {
   isOpen: boolean;
   onClose: () => void;
   t: (key: string) => string;
+  onStepChange?: (stepIndex: number) => void;
 }
 
 interface StepConfig {
@@ -67,7 +68,7 @@ function isMobile(): boolean {
 // Component
 // ---------------------------------------------------------------------------
 
-export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
+export function ProductTour({ isOpen, onClose, t, onStepChange }: ProductTourProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
   const [placement, setPlacement] = useState<TooltipPlacement>('bottom');
@@ -140,6 +141,13 @@ export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
   // Re-measure when step changes or on resize / scroll
   // -----------------------------------------------------------------------
 
+  // Notify parent on step changes
+  useEffect(() => {
+    if (mounted) {
+      onStepChange?.(currentStep);
+    }
+  }, [currentStep, mounted, onStepChange]);
+
   useEffect(() => {
     if (!mounted) return;
 
@@ -147,18 +155,23 @@ export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
     setIsAnimating(true);
     const animTimer = setTimeout(() => setIsAnimating(false), 300);
 
-    // Small delay to allow layout to settle
-    const measureTimer = setTimeout(() => measure(), 60);
-
     // Watch target element for size changes
     const step = STEPS[currentStep];
     const el = step ? getTargetElement(step.stepNumber) : null;
 
     if (el) {
+      // Scroll into view smoothly once when step changes
+      try {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch {}
+
       observerRef.current?.disconnect();
       observerRef.current = new ResizeObserver(() => measure());
       observerRef.current.observe(el);
     }
+
+    // Small delay to allow layout/scroll to settle
+    const measureTimer = setTimeout(() => measure(), 120);
 
     const handleResize = () => measure();
     const handleScroll = () => measure();
@@ -236,10 +249,10 @@ export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
         width: targetRect.width + SPOTLIGHT_PADDING * 2,
         height: targetRect.height + SPOTLIGHT_PADDING * 2,
         borderRadius: SPOTLIGHT_RADIUS,
-        // Lighter overlay: 0.45 instead of 0.6 — surrounding UI stays visible
-        boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.45)',
+        // Lighter overlay: 0.20 instead of 0.45 — surrounding UI stays visible
+        boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.20)',
         // Subtle amber glow ring on the highlighted element
-        outline: '2px solid rgba(245, 158, 11, 0.7)',
+        outline: '2px solid rgba(245, 158, 11, 0.8)',
         outlineOffset: '2px',
         pointerEvents: 'none' as const,
         transition: 'top 0.35s cubic-bezier(.4,0,.2,1), left 0.35s cubic-bezier(.4,0,.2,1), width 0.35s cubic-bezier(.4,0,.2,1), height 0.35s cubic-bezier(.4,0,.2,1)',
@@ -283,30 +296,26 @@ export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
       tooltipLeft = window.innerWidth - 16 - TOOLTIP_MAX_WIDTH;
     }
 
+    const estimatedHeight = 220; // safe estimation of tooltip height
+    let tooltipTop = 0;
+
     if (placement === 'bottom') {
-      return {
-        position: 'fixed' as const,
-        top: targetRect.top + targetRect.height + SPOTLIGHT_PADDING + TOOLTIP_GAP,
-        left: tooltipLeft,
-        width: TOOLTIP_MAX_WIDTH,
-        zIndex: 10002,
-      };
+      tooltipTop = targetRect.top + targetRect.height + SPOTLIGHT_PADDING + TOOLTIP_GAP;
+    } else if (placement === 'right') {
+      tooltipTop = targetRect.top + targetRect.height / 2 - 100;
+    } else { // 'top'
+      tooltipTop = targetRect.top - SPOTLIGHT_PADDING - TOOLTIP_GAP - estimatedHeight;
     }
 
-    if (placement === 'right') {
-      return {
-        position: 'fixed' as const,
-        top: targetRect.top + targetRect.height / 2 - 100,
-        left: targetRect.left + targetRect.width + SPOTLIGHT_PADDING + TOOLTIP_GAP,
-        width: TOOLTIP_MAX_WIDTH,
-        zIndex: 10002,
-      };
+    // Clamp vertical position within viewport
+    if (tooltipTop < 16) tooltipTop = 16;
+    if (tooltipTop + estimatedHeight > window.innerHeight - 16) {
+      tooltipTop = window.innerHeight - 16 - estimatedHeight;
     }
 
-    // 'top'
     return {
       position: 'fixed' as const,
-      bottom: window.innerHeight - (targetRect.top - SPOTLIGHT_PADDING - TOOLTIP_GAP),
+      top: tooltipTop,
       left: tooltipLeft,
       width: TOOLTIP_MAX_WIDTH,
       zIndex: 10002,
@@ -364,10 +373,9 @@ export function ProductTour({ isOpen, onClose, t }: ProductTourProps) {
   return (
     <>
       {/* ── Backdrop overlay — lighter to keep app visible behind ── */}
-      {/* backdrop-blur-[2px]: subtle blur, not full blackout */}
+      {/* backdrop-blur-[1.5px]: subtle blur, not full blackout */}
       <div
-        className="fixed inset-0 z-[9999] backdrop-blur-[2px]"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+        className="fixed inset-0 z-[9999] backdrop-blur-[1.5px] bg-black/10"
         aria-hidden
       />
 

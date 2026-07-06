@@ -14,8 +14,12 @@ const DEFAULT_ACTION_RESPONSE: ActionGeneratorResponse = {
   riskFactors: ['Action plan generation output was malformed.']
 };
 
-const SYSTEM_INSTRUCTION = `Generate dispute resources. Keep checklist, timeline, summaries, and risk factors extremely concise. Draft draft documents with placeholders (e.g. [Your Name]).
-For the checklist: ONLY include evidence items that are explicitly mentioned or detected in the user query or document analysis. DO NOT include optional, generic, hypothetical, or typical evidence categories that the user has not explicitly stated they possess (e.g. do not add bank statements, photos, or witness statements unless the user query explicitly mentions them).
+const SYSTEM_INSTRUCTION = `Generate dispute resources. Keep checklist, timeline, summaries, and risk factors extremely concise.
+CRITICAL CHRONOLOGY RULES:
+1. Timeline: Build a chronologically valid timeline consisting ONLY of verified document events, verified user statement facts, and legally inferred milestones. Never invent hypothetical dates or events.
+2. Context-Aware Notice Drafting: Look at the Extracted Entities in the Document Analysis context (such as names, addresses, and deposit amounts). Automatically populate these values directly into the drafted legal notice templates (documents[i].previewText) instead of leaving blank placeholders, unless the entity is missing or has low confidence.
+3. Checklist: ONLY include evidence items that are explicitly mentioned or detected in the user query or document analysis. DO NOT include optional, generic, hypothetical, or typical evidence categories that the user has not explicitly stated they possess.
+
 Output JSON only:
 {
   checklist: string[];   // short evidence items explicitly detected/mentioned
@@ -30,7 +34,7 @@ Output JSON only:
   documents: Array<{
     title: string;       // e.g. "Refund Demand Notice"
     type: string;        // "Notice" | "Complaint" | "Email"
-    previewText: string; // concise template text with bracketed placeholders
+    previewText: string; // complete drafted text in English (with placeholders like [Your Name] only for missing info)
   }>;
   score: number;         // 0-100
   riskLevel: "Low" | "Medium" | "High";
@@ -150,11 +154,11 @@ export async function runActionGeneratorAgent(
   const prompt = `User Query: "${userQuery}"
 Category: "${category}"
 Advice provided: "${adviceContext}"
-${analysisContext ? `Document Analysis: \n${analysisContext}` : ''}
+${analysisContext ? `Document Analysis Context: \n${analysisContext}` : ''}
 
-Generate the evidence checklist, action timeline, case summary, legal drafts, and strength analysis. Format the response as JSON.
-CRITICAL checklist constraint: For the "checklist" field, ONLY include evidence items that are explicitly mentioned or detected in the User Query or Document Analysis. DO NOT include any other typical or optional evidence items (such as "Bank Statements", "Photos/Videos", or "Witness Statements") if the user has not explicitly stated they have them.
+Generate the evidence checklist, chronological action timeline, case summary, legal drafts, and strength analysis. Format the response as JSON.
 IMPORTANT: You must write all output text, including the checklist item names, timeline title/descriptions, summary, nextAction, and riskFactors in ${langName}.
+Ensure absolute consistency with the entities extracted in the Document Analysis Context (names, dates, deposit values).
 MULTILINGUAL SAFETY RULE: The generated document content (documents[i].previewText and documents[i].title) MUST REMAIN IN ENGLISH. Under no circumstances should the legal templates, consumer complaints, court filing templates, affidavits, or formal legal drafts be automatically translated, unless the user query explicitly requests the document in Hindi or Gujarati.`;
 
   const rawResponse = await generateWithGemini(prompt, {

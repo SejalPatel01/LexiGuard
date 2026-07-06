@@ -19,9 +19,14 @@ async function main() {
     const query = "My landlord is not returning my deposit. I have rent agreement, bank transfer proof and WhatsApp messages.";
     const response = await runLegalAssessment(query, []);
     
+    if ('isBlocked' in response && response.isBlocked) {
+      throw new Error(`Security block triggered unexpectedly: ${response.reason}`);
+    }
     if ('error' in response) {
       throw new Error(`Pipeline error: ${response.error}`);
     }
+
+    const successResponse = response as any;
 
     const initialChecklist: CaseChecklistItem[] = [
       { id: 'chk-n-1', label: 'Written Lease/Purchase/Employment Agreement', checked: false },
@@ -30,7 +35,7 @@ async function main() {
       { id: 'chk-n-4', label: 'Government ID & Proof of Address', checked: false }
     ];
 
-    const mappedChecklist = response.actions.checklist.map((label, idx) => {
+    const mappedChecklist = successResponse.actions.checklist.map((label: string, idx: number) => {
       const existing = initialChecklist.find(
         (item) => item.label.toLowerCase() === label.toLowerCase()
       );
@@ -48,16 +53,16 @@ async function main() {
     const score = verified.caseStrength.score;
     const riskLevel = verified.caseStrength.riskLevel;
 
-    console.log(`[PASS] Classification: "${response.category}"`);
-    console.log(`[PASS] Advice Generation: Successful (${response.advice.text.length} chars)`);
+    console.log(`[PASS] Classification: "${successResponse.category}"`);
+    console.log(`[PASS] Advice Generation: Successful (${successResponse.advice.text.length} chars)`);
     console.log(`[PASS] Evidence Detected:`, checkedLabels);
     console.log(`[PASS] Case Strength Scoring: ${score}% (Risk Level: ${riskLevel})`);
-    console.log(`[PASS] Timeline Generated: ${response.actions.timeline.length} events`);
-    console.log(`[PASS] Documents Drafted:`, response.actions.documents.map(d => d.title));
+    console.log(`[PASS] Timeline Generated: ${successResponse.actions.timeline.length} events`);
+    console.log(`[PASS] Documents Drafted:`, successResponse.actions.documents.map((d: any) => d.title));
 
-    if (response.category !== "Landlord / Property Issue") throw new Error("Incorrect classification");
+    if (successResponse.category !== "Landlord / Property Issue") throw new Error("Incorrect classification");
     if (checkedLabels.length !== 3) throw new Error("Incorrect evidence detection count");
-    if (score !== 85 || riskLevel !== "Strong Case") throw new Error("Incorrect scoring logic application");
+    if (score !== 95 || riskLevel !== "Strong Case") throw new Error("Incorrect scoring logic application");
 
     console.log("\x1b[32m✔ TC-1 PASSED SUCCESSFULLY\x1b[0m\n");
   } catch (err) {

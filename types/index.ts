@@ -5,12 +5,61 @@ export interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string; // ISO string or human-readable format
+  originalLanguage?: 'en' | 'hi' | 'gu';
+  originalText?: string;
+  translations?: {
+    en?: string;
+    hi?: string;
+    gu?: string;
+    version?: number;
+  };
+  toolkitCache?: {
+    en?: {
+      adviceText: string;
+      rights: string[];
+      actions: string[];
+      notes: string[];
+      checklist: string[];
+      timeline: Array<{ day: string; action: string; description: string }>;
+      summary: { overview: string; legalProvisions: string[]; nextAction: string };
+      riskLevel: string;
+      riskFactors: string[];
+    };
+    hi?: {
+      adviceText: string;
+      rights: string[];
+      actions: string[];
+      notes: string[];
+      checklist: string[];
+      timeline: Array<{ day: string; action: string; description: string }>;
+      summary: { overview: string; legalProvisions: string[]; nextAction: string };
+      riskLevel: string;
+      riskFactors: string[];
+    };
+    gu?: {
+      adviceText: string;
+      rights: string[];
+      actions: string[];
+      notes: string[];
+      checklist: string[];
+      timeline: Array<{ day: string; action: string; description: string }>;
+      summary: { overview: string; legalProvisions: string[]; nextAction: string };
+      riskLevel: string;
+      riskFactors: string[];
+    };
+    version?: number;
+  };
+  isBlocked?: boolean;
+  threatType?: 'Prompt Injection' | 'Jailbreak' | 'Unknown Suspicious Input';
+  severity?: 'SAFE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  reason?: string;
 }
 
 export interface CaseChecklistItem {
   id: string;
   label: string;
   checked: boolean;
+  evidenceCategory?: string;
 }
 
 export interface CaseStrength {
@@ -42,6 +91,15 @@ export interface CaseSummary {
   nextAction: string;
 }
 
+export interface UploadedDocAnalysisCache {
+  summary: string;
+  clauses: Array<{ title: string; explanation: string; riskLevel: string }>;
+  obligations: string[];
+  deadlines: Array<{ date: string; action: string }>;
+  risks: string[];
+  text?: string;
+}
+
 export interface Chat {
   id: string;
   title: string;
@@ -57,6 +115,12 @@ export interface Chat {
     type: string;
     text: string;
     analysis: DocumentAnalyzerResponse;
+    analysisTranslationCache?: {
+      en?: UploadedDocAnalysisCache;
+      hi?: UploadedDocAnalysisCache;
+      gu?: UploadedDocAnalysisCache;
+      version?: number;
+    };
   };
   uploadedDocs?: Array<{
     id: string;
@@ -64,6 +128,12 @@ export interface Chat {
     type: string;
     text: string;
     analysis: DocumentAnalyzerResponse;
+    analysisTranslationCache?: {
+      en?: UploadedDocAnalysisCache;
+      hi?: UploadedDocAnalysisCache;
+      gu?: UploadedDocAnalysisCache;
+    };
   }>;
   pinned?: boolean;
+  chatLanguage?: 'en' | 'hi' | 'gu';
 }

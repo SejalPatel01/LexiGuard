@@ -3,13 +3,14 @@ export type Language = 'en' | 'hi' | 'gu';
 export const translations: Record<Language, Record<string, string>> = {
   en: {
     // Sidebar Brand & Options
-    "brand_title": "NyayaAI",
+    "brand_title": "LexiGuard",
     "brand_subtitle": "Legal Guardian",
     "new_case": "New Case Inquiry",
     "search_chats": "Search conversations...",
     "today": "Today",
     "yesterday": "Yesterday",
     "older": "Recent Cases",
+    "recent_cases": "Recent",
     "no_chats_found": "No conversations found",
     "light_mode": "Light Mode",
     "dark_mode": "Dark Mode",
@@ -24,7 +25,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "delete_case": "Delete Case",
 
     // Chat Composer
-    "chat_placeholder": "Ask NyayaAI about your legal issue...",
+    "chat_placeholder": "Ask LexiGuard about your legal issue...",
     "listening": "Listening...",
     "mic_stop_hint": "Tap microphone to stop recording...",
     "attach_files": "Attach supporting files...",
@@ -32,6 +33,8 @@ export const translations: Record<Language, Record<string, string>> = {
     "mic_permission_denied": "Microphone permission denied. Please allow mic access in browser settings.",
     "click_speak": "Click to speak",
     "send": "Send",
+    "jump_latest_simple": "↓ Jump to Latest",
+    "jump_latest_unread": "↓ Jump to Latest ({count} new)",
 
     // Toolkit Dashboard Headings
     "toolkit_dashboard": "Legal Toolkit Dashboard",
@@ -87,6 +90,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "Consumer Complaint": "Consumer Complaint",
     "Cyber Fraud": "Cyber Fraud",
     "General Legal Issue": "General Legal Issue",
+    "Landlord Deposit Dispute": "Landlord Deposit Dispute",
+    "Employment Salary Dispute": "Employment Salary Dispute",
+    "New Case Inquiry": "New Case Inquiry",
 
     // Checklist default items
     "Written Lease/Purchase/Employment Agreement": "Written Lease/Purchase/Employment Agreement",
@@ -123,13 +129,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "toolkit_btn": "Toolkit",
     "evaluate_dispute": "Evaluate your dispute with",
     "select_sample": "Select a sample legal issue to begin",
-    "ocr_running": "NyayaAI is running OCR and extracting document content...",
-    "reviewing_doc": "NyayaAI is reviewing your case details...",
+    "ocr_running": "LexiGuard is running OCR and extracting document content...",
+    "reviewing_doc": "LexiGuard is reviewing your case details...",
     "stop_btn": "Stop",
     "remove_file": "Remove file",
     "upload_btn_title": "Upload PDF or Image for document analysis",
     "send_message": "Send message",
-    "disclaimer_footer": "NyayaAI provides general informational guidance only — not legal advice. Consult a qualified advocate for your specific situation.",
+    "disclaimer_footer": "LexiGuard provides general informational guidance only — not legal advice. Consult a qualified advocate for your specific situation.",
     "drop_to_simplify": "Drop Document to Simplify",
     "drop_desc": "Upload PDF agreements, notices, contracts or legal documents for instant AI-powered clause analysis.",
     "file_too_large": "File size exceeds 10MB limit.",
@@ -137,7 +143,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Message Bubble
     "sender_you": "You",
-    "sender_ai": "NyayaAI Guardian",
+    "sender_ai": "LexiGuard Guardian",
     "copy_response": "Copy response",
     "copied": "Copied!",
     "copy_btn": "Copy",
@@ -239,9 +245,20 @@ export const translations: Record<Language, Record<string, string>> = {
     "action_general": "Draft Legal Notice",
     "reason_general": "A formal legal notice puts the other party on record and initiates the dispute resolution process.",
 
+    // Initial Empty State Dynamic Texts
+    "Initial details pending. Case strength score will adjust once incident context is provided.": "Initial details pending. Case strength score will adjust once incident context is provided.",
+    "Please detail your legal inquiry in the chat window. LexiGuard will compile an executive case summary here.": "Please detail your legal inquiry in the chat window. LexiGuard will compile an executive case summary here.",
+    "Explain the facts of your dispute to generate action items.": "Explain the facts of your dispute to generate action items.",
+    "Initial Consultation": "Initial Consultation",
+    "LexiGuard intake chat session started.": "LexiGuard intake chat session started.",
+    "Fact Verification": "Fact Verification",
+    "Review supporting evidence items checklist.": "Review supporting evidence items checklist.",
+    "Draft demand / representation": "Draft demand / representation",
+    "Document assembly in the Legal Toolkit.": "Document assembly in the Legal Toolkit.",
+
     // Product Tour
     "tour_step1_title": "Describe Your Legal Issue",
-    "tour_step1_desc": "Type your legal question or describe your dispute here. NyayaAI will analyze it instantly.",
+    "tour_step1_desc": "Type your legal question or describe your dispute here. LexiGuard will analyze it instantly.",
     "tour_step2_title": "Upload Evidence",
     "tour_step2_desc": "Upload agreements, receipts, screenshots or other evidence here for analysis.",
     "tour_step3_title": "Document Analysis",
@@ -259,21 +276,67 @@ export const translations: Record<Language, Record<string, string>> = {
     "help_menu": "Help",
     "relaunch_tour": "Relaunch Tour",
     "load_judge_demo": "Load Judge Demo",
-    "help_about": "About NyayaAI",
-
-    // Misc
-    "compliance_footer": "NyayaAI Compliance Suite • Phase 1",
+    "help_about": "About LexiGuard",
+    "compliance_footer": "LexiGuard Compliance Suite • Phase 1",
     "language_label": "Language",
+
+    // Landlord Demo translations
+    "My landlord is refusing to return my security deposit of $1,500. He claims there are damages, but we cleaned the house completely and took photos.": "My landlord is refusing to return my security deposit of $1,500. He claims there are damages, but we cleaned the house completely and took photos.",
+    "Under standard rental laws, a landlord must return the security deposit within a specific period (usually 14–30 days depending on your jurisdiction) or provide an itemized list of deductions for damages beyond normal wear and tear.\n\nSince you have photos showing the clean state of the apartment, we have strong evidence to contest this. Let's start by reviewing your lease agreement and drafting a formal Demand Notice.": "Under standard rental laws, a landlord must return the security deposit within a specific period (usually 14–30 days depending on your jurisdiction) or provide an itemized list of deductions for damages beyond normal wear and tear.\n\nSince you have photos showing the clean state of the apartment, we have strong evidence to contest this. Let's start by reviewing your lease agreement and drafting a formal Demand Notice.",
+    "Dispute regarding the return of a $1,500 security deposit. Tenant claims normal wear and tear and has photo documentation. Landlord claims damages but failed to provide an itemized receipt.": "Dispute regarding the return of a $1,500 security deposit. Tenant claims normal wear and tear and has photo documentation. Landlord claims damages but failed to provide an itemized receipt.",
+    "Civil Code Section 1950.5 (Security Deposit Regulations)": "Civil Code Section 1950.5 (Security Deposit Regulations)",
+    "State Fair Housing and Tenant Protection Act": "State Fair Housing and Tenant Protection Act",
+    "Monitor the 14-day reply window. If no reply, proceed to prepare Small Claims Court petition.": "Monitor the 14-day reply window. If no reply, proceed to prepare Small Claims Court petition.",
+    "Lease Agreement Terminated": "Lease Agreement Terminated",
+    "Tenancy ended and key handover completed.": "Tenancy ended and key handover completed.",
+    "Demand Notice Served": "Demand Notice Served",
+    "Served formal demand letter for return of security deposit.": "Served formal demand letter for return of security deposit.",
+    "Landlord Reply Window": "Landlord Reply Window",
+    "Awaiting landlord response or payment. Default deadline is 14 days.": "Awaiting landlord response or payment. Default deadline is 14 days.",
+    "Small Claims Filing": "Small Claims Filing",
+    "File a petition in Small Claims Court if no response is received.": "File a petition in Small Claims Court if no response is received.",
+    "Move-out photographs verify the premises are in clean, undamaged condition.": "Move-out photographs verify the premises are in clean, undamaged condition.",
+    "Landlord failed to provide an itemized statement within the statutory 21-day window.": "Landlord failed to provide an itemized statement within the statutory 21-day window.",
+    "Written communications show the landlord acknowledged the lease termination without prior complaints.": "Written communications show the landlord acknowledged the lease termination without prior complaints.",
+    "Signed Rent Agreement for flat 2B, 104 Park Avenue. Specifies security deposit of $1,500.": "Signed Rent Agreement for flat 2B, 104 Park Avenue. Specifies security deposit of $1,500.",
+    "Security Deposit Clause": "Security Deposit Clause",
+    "Tenant pays $1,500 security deposit to be refunded within 14 days of move-out.": "Tenant pays $1,500 security deposit to be refunded within 14 days of move-out.",
+    "Notice Period Clause": "Notice Period Clause",
+    "Either party must give 30 days notice prior to terminating lease.": "Either party must give 30 days notice prior to terminating lease.",
+    "Pay rent monthly by 5th day": "Pay rent monthly by 5th day",
+    "Return property in clean condition": "Return property in clean condition",
+    "14 days post lease termination": "14 days post lease termination",
+    "Refund security deposit": "Refund security deposit",
+    "Rent Agreement specifying tenancy terms and deposit obligations.": "Rent Agreement specifying tenancy terms and deposit obligations.",
+    
+    // Recommendations & advisor
+    "Generate Security Deposit Demand Notice": "Generate Security Deposit Demand Notice",
+    "All critical evidence is collected. You can now generate the demand notice template to send to the landlord.": "All critical evidence is collected. You can now generate the demand notice template to send to the landlord.",
+    "Send Security Deposit Demand Notice": "Send Security Deposit Demand Notice",
+    "Formally demand the refund of the security deposit within the legal notice period before proceeding to litigation.": "Formally demand the refund of the security deposit within the legal notice period before proceeding to litigation.",
+    "Written agreement establishes lease terms and deposit refund conditions.": "Written agreement establishes lease terms and deposit refund conditions.",
+    "Rent or Lease Agreement": "Rent or Lease Agreement",
+    "Payment proof strengthens claims of actual deposit payment.": "Payment proof strengthens claims of actual deposit payment.",
+    "Bank statement, bank receipt, or transaction screenshot": "Bank statement, bank receipt, or transaction screenshot",
+    "Communication logs establish deposit demand and landlord refusal timeline.": "Communication logs establish deposit demand and landlord refusal timeline.",
+    "WhatsApp screenshots or chat export": "WhatsApp screenshots or chat export",
+    "Handover proof confirms the date vacancy occurred and lease ended.": "Handover proof confirms the date vacancy occurred and lease ended.",
+    "Property handover or keys return slip": "Property handover or keys return slip",
+    "Witness statements back up verbal discussions and physical condition.": "Witness statements back up verbal discussions and physical condition.",
+    "Signed witness declaration or statement": "Signed witness declaration or statement",
+    "Photos/videos document property condition and avoid wear-and-tear claims.": "Photos/videos document property condition and avoid wear-and-tear claims.",
+    "Condition photographs or video walk-through": "Condition photographs or video walk-through"
   },
   hi: {
     // Sidebar Brand & Options
-    "brand_title": "न्यायAI",
+    "brand_title": "LexiGuard",
     "brand_subtitle": "कानूनी रक्षक",
     "new_case": "नया मामला पूछताछ",
     "search_chats": "बातचीत खोजें...",
     "today": "आज",
     "yesterday": "कल",
     "older": "हाल के मामले",
+    "recent_cases": "हाल के",
     "no_chats_found": "कोई बातचीत नहीं मिली",
     "light_mode": "लाइट मोड",
     "dark_mode": "डार्क मोड",
@@ -288,7 +351,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "delete_case": "मामला हटाएं",
 
     // Chat Composer
-    "chat_placeholder": "न्यायAI से अपने कानूनी मामले के बारे में पूछें...",
+    "chat_placeholder": "LexiGuard से अपने कानूनी मामले के बारे में पूछें...",
     "listening": "सुन रहा हूँ...",
     "mic_stop_hint": "रिकॉर्डिंग रोकने के लिए माइक्रोफ़ोन टैप करें...",
     "attach_files": "सहायक फाइलें संलग्न करें...",
@@ -296,6 +359,8 @@ export const translations: Record<Language, Record<string, string>> = {
     "mic_permission_denied": "माइक्रोफ़ोन अनुमति अस्वीकृत। कृपया अपने ब्राउज़र में माइक की अनुमति दें।",
     "click_speak": "बोलने के लिए क्लिक करें",
     "send": "भेजें",
+    "jump_latest_simple": "↓ नवीनतम पर जाएं",
+    "jump_latest_unread": "↓ नवीनतम पर जाएं ({count} नए)",
 
     // Toolkit Dashboard Headings
     "toolkit_dashboard": "कानूनी टूलकिट डैशबोर्ड",
@@ -351,6 +416,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "Consumer Complaint": "उपभोक्ता शिकायत",
     "Cyber Fraud": "साइबर धोखाधड़ी",
     "General Legal Issue": "सामान्य कानूनी मामला",
+    "Landlord Deposit Dispute": "किराया समझौता विवाद",
+    "Employment Salary Dispute": "रोजगार वेतन विवाद",
+    "New Case Inquiry": "नया मामला पूछताछ",
 
     // Checklist default items (Hindi)
     "Written Lease/Purchase/Employment Agreement": "लिखित पट्टा/खरीद/रोजगार समझौता",
@@ -387,13 +455,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "toolkit_btn": "टूलकिट",
     "evaluate_dispute": "अपने विवाद का मूल्यांकन करें",
     "select_sample": "शुरू करने के लिए एक नमूना कानूनी मामला चुनें",
-    "ocr_running": "न्यायAI OCR चला रहा है और दस्तावेज़ सामग्री निकाल रहा है...",
-    "reviewing_doc": "न्यायAI आपके मामले की समीक्षा कर रहा है...",
+    "ocr_running": "LexiGuard OCR चला रहा है और दस्तावेज़ सामग्री निकाल रहा है...",
+    "reviewing_doc": "LexiGuard आपके मामले की समीक्षा कर रहा है...",
     "stop_btn": "रोकें",
     "remove_file": "फ़ाइल हटाएं",
     "upload_btn_title": "दस्तावेज़ विश्लेषण के लिए पीडीएफ या छवि अपलोड करें",
     "send_message": "संदेश भेजें",
-    "disclaimer_footer": "न्यायAI केवल सामान्य सूचनात्मक मार्गदर्शन प्रदान करता है — कानूनी सलाह नहीं। अपनी विशिष्ट स्थिति के लिए योग्य वकील से परामर्श करें।",
+    "disclaimer_footer": "LexiGuard केवल सामान्य सूचनात्मक मार्गदर्शन प्रदान करता है — कानूनी सलाह नहीं। अपनी विशिष्ट स्थिति के लिए योग्य वकील से परामर्श करें।",
     "drop_to_simplify": "सरलीकरण के लिए दस्तावेज़ छोड़ें",
     "drop_desc": "तत्काल AI-संचालित धारा विश्लेषण के लिए पीडीएफ समझौते, नोटिस, अनुबंध या कानूनी दस्तावेज़ अपलोड करें।",
     "file_too_large": "फ़ाइल का आकार 10MB सीमा से अधिक है।",
@@ -401,7 +469,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Message Bubble
     "sender_you": "आप",
-    "sender_ai": "न्यायAI रक्षक",
+    "sender_ai": "LexiGuard रक्षक",
     "copy_response": "उत्तर कॉपी करें",
     "copied": "कॉपी हो गया!",
     "copy_btn": "कॉपी",
@@ -503,9 +571,20 @@ export const translations: Record<Language, Record<string, string>> = {
     "action_general": "कानूनी नोटिस तैयार करें",
     "reason_general": "एक औपचारिक कानूनी नोटिस दूसरे पक्ष को रिकॉर्ड पर रखता है और विवाद समाधान प्रक्रिया शुरू करता है।",
 
+    // Initial Empty State Dynamic Texts
+    "Initial details pending. Case strength score will adjust once incident context is provided.": "प्रारंभिक विवरण लंबित हैं। घटना का संदर्भ प्रदान किए जाने के बाद मामले की मजबूती का स्कोर समायोजित किया जाएगा।",
+    "Please detail your legal inquiry in the chat window. LexiGuard will compile an executive case summary here.": "कृपया चैट विंडो में अपने कानूनी प्रश्न का विवरण दें। LexiGuard यहां एक कार्यकारी मामला सारांश संकलित करेगा।",
+    "Explain the facts of your dispute to generate action items.": "कार्रवाई आइटम उत्पन्न करने के लिए अपने विवाद के तथ्यों को समझाएं।",
+    "Initial Consultation": "प्रारंभिक परामर्श",
+    "LexiGuard intake chat session started.": "LexiGuard सेवन चैट सत्र शुरू हुआ।",
+    "Fact Verification": "तथ्य सत्यापन",
+    "Review supporting evidence items checklist.": "सहायक साक्ष्य मदों की चेकलिस्ट की समीक्षा करें।",
+    "Draft demand / representation": "मांग / प्रतिनिधित्व का प्रारूप तैयार करें",
+    "Document assembly in the Legal Toolkit.": "कानूनी टूलकिट में दस्तावेज़ संयोजन।",
+
     // Product Tour
     "tour_step1_title": "अपना कानूनी मुद्दा बताएं",
-    "tour_step1_desc": "यहां अपना कानूनी प्रश्न टाइप करें या अपने विवाद का वर्णन करें। न्यायAI तुरंत इसका विश्लेषण करेगा।",
+    "tour_step1_desc": "यहां अपना कानूनी प्रश्न टाइप करें या अपने विवाद का वर्णन करें। LexiGuard तुरंत इसका विश्लेषण करेगा।",
     "tour_step2_title": "साक्ष्य अपलोड करें",
     "tour_step2_desc": "विश्लेषण के लिए यहां समझौते, रसीदें, स्क्रीनशॉट या अन्य साक्ष्य अपलोड करें।",
     "tour_step3_title": "दस्तावेज़ विश्लेषण",
@@ -523,21 +602,67 @@ export const translations: Record<Language, Record<string, string>> = {
     "help_menu": "सहायता",
     "relaunch_tour": "टूर पुनः शुरू करें",
     "load_judge_demo": "जज डेमो लोड करें",
-    "help_about": "न्यायAI के बारे में",
-
-    // Misc
-    "compliance_footer": "न्यायAI अनुपालन सूट • चरण 1",
+    "help_about": "LexiGuard के बारे में",
+    "compliance_footer": "LexiGuard अनुपालन सूट • चरण 1",
     "language_label": "भाषा",
+
+    // Landlord Demo translations
+    "My landlord is refusing to return my security deposit of $1,500. He claims there are damages, but we cleaned the house completely and took photos.": "मेरा मकान मालिक मेरी $1,500 की सुरक्षा राशि वापस करने से इनकार कर रहा है। उसका दावा है कि नुकसान हुआ है, लेकिन हमने घर को पूरी तरह से साफ किया और तस्वीरें लीं।",
+    "Under standard rental laws, a landlord must return the security deposit within a specific period (usually 14–30 days depending on your jurisdiction) or provide an itemized list of deductions for damages beyond normal wear and tear.\n\nSince you have photos showing the clean state of the apartment, we have strong evidence to contest this. Let's start by reviewing your lease agreement and drafting a formal Demand Notice.": "मानक किराये के कानूनों के तहत, एक मकान मालिक को एक विशिष्ट अवधि (आमतौर पर आपके अधिकार क्षेत्र के आधार पर 14-30 दिन) के भीतर सुरक्षा राशि वापस करनी होगी या सामान्य टूट-फूट से अधिक नुकसान के लिए कटौती की एक विस्तृत सूची प्रदान करनी होगी।\n\nचूंकि आपके पास अपार्टमेंट की साफ स्थिति दिखाने वाली तस्वीरें हैं, इसलिए हमारे पास इसका मुकाबला करने के लिए मजबूत सबूत हैं। आइए आपके पट्टा समझौते की समीक्षा करके और एक औपचारिक मांग नोटिस का मसौदा तैयार करके शुरुआत करें।",
+    "Dispute regarding the return of a $1,500 security deposit. Tenant claims normal wear and tear and has photo documentation. Landlord claims damages but failed to provide an itemized receipt.": "$1,500 सुरक्षा राशि की वापसी के संबंध में विवाद। किरायेदार सामान्य टूट-फूट का दावा करता है और उसके पास फोटो दस्तावेज हैं। मकान मालिक नुकसान का दावा करता है लेकिन एक विस्तृत रसीद प्रदान करने में विफल रहा।",
+    "Civil Code Section 1950.5 (Security Deposit Regulations)": "सिविल कोड धारा 1950.5 (सुरक्षा राशि विनियम)",
+    "State Fair Housing and Tenant Protection Act": "राज्य निष्पक्ष आवास और किरायेदार संरक्षण अधिनियम",
+    "Monitor the 14-day reply window. If no reply, proceed to prepare Small Claims Court petition.": "14-दिनीय उत्तर खिड़की की निगरानी करें। यदि कोई उत्तर नहीं मिलता है, तो स्मॉल क्लेम्स कोर्ट याचिका तैयार करने की दिशा में आगे बढ़ें।",
+    "Lease Agreement Terminated": "पट्टा समझौता समाप्त",
+    "Tenancy ended and key handover completed.": "किरायेदारी समाप्त हुई और चाबी सौंपने का काम पूरा हुआ।",
+    "Demand Notice Served": "मांग नोटिस भेजा गया",
+    "Served formal demand letter for return of security deposit.": "सुरक्षा राशि की वापसी के लिए औपचारिक मांग पत्र भेजा गया।",
+    "Landlord Reply Window": "मकान मालिक उत्तर खिड़की",
+    "Awaiting landlord response or payment. Default deadline is 14 days.": "मकान मालिक की प्रतिक्रिया या भुगतान की प्रतीक्षा है। डिफ़ॉल्ट समय सीमा 14 दिन है।",
+    "Small Claims Filing": "छोटे दावों का कोर्ट दाखिला",
+    "File a petition in Small Claims Court if no response is received.": "यदि कोई प्रतिक्रिया प्राप्त नहीं होती है तो स्मॉल क्लेम्स कोर्ट में याचिका दायर करें।",
+    "Move-out photographs verify the premises are in clean, undamaged condition.": "जाने के समय के चित्र सत्यापित करते हैं कि परिसर साफ और बिना किसी नुकसान की स्थिति में है।",
+    "Landlord failed to provide an itemized statement within the statutory 21-day window.": "मकान मालिक वैधानिक 21-दिवसीय खिड़की के भीतर मदवार विवरण प्रदान करने में विफल रहा।",
+    "Written communications show the landlord acknowledged the lease termination without prior complaints.": "लिखित संचार दर्शाते हैं कि मकान मालिक ने बिना किसी पूर्व शिकायत के पट्टा समाप्ति को स्वीकार किया।",
+    "Signed Rent Agreement for flat 2B, 104 Park Avenue. Specifies security deposit of $1,500.": "फ्लैट 2B, 104 पार्क एवेन्यू के लिए हस्ताक्षरित किराया समझौता। $1,500 की सुरक्षा राशि निर्दिष्ट करता है।",
+    "Security Deposit Clause": "सुरक्षा राशि धारा",
+    "Tenant pays $1,500 security deposit to be refunded within 14 days of move-out.": "किरायेदार $1,500 सुरक्षा राशि का भुगतान करता है जिसे बाहर जाने के 14 दिनों के भीतर वापस किया जाना है।",
+    "Notice Period Clause": "सूचना अवधि धारा",
+    "Either party must give 30 days notice prior to terminating lease.": "किसी भी पक्ष को पट्टा समाप्त करने से पहले 30 दिनों का नोटिस देना होगा।",
+    "Pay rent monthly by 5th day": "हर महीने की 5 तारीख तक किराया भुगतान करें",
+    "Return property in clean condition": "संपत्ति को साफ स्थिति में लौटाएं",
+    "14 days post lease termination": "पट्टा समाप्ति के 14 दिन बाद",
+    "Refund security deposit": "सुरक्षा राशि वापस करें",
+    "Rent Agreement specifying tenancy terms and deposit obligations.": "किरायेदारी की शर्तों और सुरक्षा राशि दायित्वों को निर्दिष्ट करने वाला किराया समझौता।",
+    
+    // Recommendations & advisor
+    "Generate Security Deposit Demand Notice": "सुरक्षा जमा मांग नोटिस उत्पन्न करें",
+    "All critical evidence is collected. You can now generate the demand notice template to send to the landlord.": "सभी महत्वपूर्ण सबूत एकत्र किए गए हैं। अब आप मकान मालिक को भेजने के लिए मांग नोटिस टेम्पलेट उत्पन्न कर सकते हैं।",
+    "Send Security Deposit Demand Notice": "सुरक्षा जमा मांग नोटिस भेजें",
+    "Formally demand the refund of the security deposit within the legal notice period before proceeding to litigation.": "मुकदमा शुरू करने से पहले कानूनी नोटिस अवधि के भीतर सुरक्षा जमा की वापसी की औपचारिक मांग करें।",
+    "Written agreement establishes lease terms and deposit refund conditions.": "लिखित समझौता पट्टा शर्तों और जमानत राशि वापसी की शर्तों को स्थापित करता है।",
+    "Rent or Lease Agreement": "किराया या पट्टा समझौता",
+    "Payment proof strengthens claims of actual deposit payment.": "भुगतान का प्रमाण वास्तविक सुरक्षा जमा भुगतान के दावों को मजबूत करता है।",
+    "Bank statement, bank receipt, or transaction screenshot": "बैंक विवरण, बैंक रसीद, या लेनदेन स्क्रीनशॉट",
+    "Communication logs establish deposit demand and landlord refusal timeline.": "संचार लॉग सुरक्षा जमा मांग और मकान मालिक के इनकार की समयरेखा स्थापित करते हैं।",
+    "WhatsApp screenshots or chat export": "व्हाट्सएप स्क्रीनशॉट या चैट निर्यात",
+    "Handover proof confirms the date vacancy occurred and lease ended.": "सौंपने का प्रमाण पुष्टि करता है कि रिक्ति किस तारीख को हुई और पट्टा कब समाप्त हुआ।",
+    "Property handover or keys return slip": "संपत्ति सौंपना या चाबी वापसी पर्ची",
+    "Witness statements back up verbal discussions and physical condition.": "गवाहों के बयान मौखिक चर्चा और भौतिक स्थिति का समर्थन करते हैं।",
+    "Signed witness declaration or statement": "हस्ताक्षर घोषित गवाह घोषणा या बयान",
+    "Photos/videos document property condition and avoid wear-and-tear claims.": "तस्वीरें/वीडियो संपत्ति की स्थिति का दस्तावेजीकरण करते हैं और सामान्य टूट-फूट के दावों से बचाते हैं।",
+    "Condition photographs or video walk-through": "स्थिति की तस्वीरें या वीडियो वॉक-थ्रू"
   },
   gu: {
     // Sidebar Brand & Options
-    "brand_title": "ન્યાયAI",
+    "brand_title": "LexiGuard",
     "brand_subtitle": "કાનૂની રક્ષક",
     "new_case": "નવો કેસ તપાસ",
     "search_chats": "વાતચીત શોધો...",
     "today": "આજે",
     "yesterday": "ગઇકાલે",
     "older": "તાજેતરના કેસો",
+    "recent_cases": "તાજેતરના",
     "no_chats_found": "કોઈ વાતચીત મળી નથી",
     "light_mode": "લાઇટ મોડ",
     "dark_mode": "ડાર્ક મોડ",
@@ -552,7 +677,7 @@ export const translations: Record<Language, Record<string, string>> = {
     "delete_case": "કેસ કાઢી નાખો",
 
     // Chat Composer
-    "chat_placeholder": "ન્યાયAI ને તમારા કાનૂની મુદ્દા વિશે પૂછો...",
+    "chat_placeholder": "LexiGuard ને તમારા કાનૂની મુદ્દા વિશે પૂછો...",
     "listening": "સાંભળી રહ્યું છે...",
     "mic_stop_hint": "રેકોર્ડિંગ રોકવા માટે માઇક્રોફોન ટેપ કરો...",
     "attach_files": "સહાયક ફાઇલો જોડો...",
@@ -560,6 +685,8 @@ export const translations: Record<Language, Record<string, string>> = {
     "mic_permission_denied": "માઇક્રોફોન પરવાનગી અસ્વીકાર્ય. કૃપા કરીને બ્રાઉઝર સેટિંગ્સમાં માઇક એક્સેસ આપો.",
     "click_speak": "બોલવા માટે ક્લિક કરો",
     "send": "મોકલો",
+    "jump_latest_simple": "↓ નવીનતમ પર જાઓ",
+    "jump_latest_unread": "↓ નવીનતમ પર જાઓ ({count} નવા)",
 
     // Toolkit Dashboard Headings
     "toolkit_dashboard": "કાનૂની ટૂલકિટ ડેશબોર્ડ",
@@ -615,6 +742,9 @@ export const translations: Record<Language, Record<string, string>> = {
     "Consumer Complaint": "ગ્રાહક ફરિયાદ",
     "Cyber Fraud": "સાયબર છેતરપિંડી",
     "General Legal Issue": "સામાન્ય કાનૂની કેસ",
+    "Landlord Deposit Dispute": "ભાડા કરાર વિવાદ",
+    "Employment Salary Dispute": "રોજગાર પગાર વિવાદ",
+    "New Case Inquiry": "નવો કેસ તપાસ",
 
     // Checklist default items (Gujarati)
     "Written Lease/Purchase/Employment Agreement": "લેખિત લીઝ/ખરીદી/રોજગાર કરાર",
@@ -651,13 +781,13 @@ export const translations: Record<Language, Record<string, string>> = {
     "toolkit_btn": "ટૂલકિટ",
     "evaluate_dispute": "તમારા વિવાદનું મૂલ્યાંકન કરો",
     "select_sample": "શરૂ કરવા માટે નમૂના કાનૂની મુદ્દો પસંદ કરો",
-    "ocr_running": "ન્યાયAI OCR ચલાવી રહ્યું છે અને દસ્તાવેજ સામગ્રી કાઢી રહ્યું છે...",
-    "reviewing_doc": "ન્યાયAI તમારા કેસની વિગતોની સમીક્ષા કરી રહ્યું છે...",
+    "ocr_running": "LexiGuard OCR ચલાવી રહ્યું છે અને દસ્તાવેજ સામગ્રી કાઢી રહ્યું છે...",
+    "reviewing_doc": "LexiGuard તમારા કેસની વિગતોની સમીક્ષા કરી રહ્યું છે...",
     "stop_btn": "રોકો",
     "remove_file": "ફાઇલ દૂર કરો",
     "upload_btn_title": "દસ્તાવેજ વિશ્લેષણ માટે પીડીએફ અથવા છબી અપલોડ કરો",
     "send_message": "સંદેશ મોકલો",
-    "disclaimer_footer": "ન્યાયAI માત્ર સામાન્ય માહિતીપ્રદ માર્ગદર્શન પ્રદાન કરે છે — કાનૂની સલાહ નહીં. તમારી ચોક્કસ પરિસ્થિતિ માટે લાયક વકીલની સલાહ લો.",
+    "disclaimer_footer": "LexiGuard માત્ર સામાન્ય માહિતીપ્રદ માર્ગદર્શન પ્રદાન કરે છે — કાનૂની સલાહ નહીં. તમારી ચોક્કસ પરિસ્થિતિ માટે લાયક વકીલની સલાહ લો।",
     "drop_to_simplify": "સરળીકરણ માટે દસ્તાવેજ છોડો",
     "drop_desc": "તાત્કાલિક AI-સંચાલિત કલમ વિશ્લેષણ માટે પીડીએફ કરારો, નોટિસ, કરાર અથવા કાનૂની દસ્તાવેજો અપલોડ કરો.",
     "file_too_large": "ફાઇલનું કદ 10MB મર્યાદા કરતાં વધારે છે.",
@@ -665,7 +795,7 @@ export const translations: Record<Language, Record<string, string>> = {
 
     // Message Bubble
     "sender_you": "તમે",
-    "sender_ai": "ન્યાયAI રક્ષક",
+    "sender_ai": "LexiGuard રક્ષક",
     "copy_response": "જવાબ કૉપી કરો",
     "copied": "કૉપી થયું!",
     "copy_btn": "કૉપી",
@@ -767,9 +897,20 @@ export const translations: Record<Language, Record<string, string>> = {
     "action_general": "કાનૂની નોટિસ તૈયાર કરો",
     "reason_general": "ઔપચારિક કાનૂની નોટિસ સામે પક્ષને રેકોર્ડ પર મૂકે છે અને વિવાદ નિરાકરણ પ્રક્રિયા શરૂ કરે છે.",
 
+    // Initial Empty State Dynamic Texts
+    "Initial details pending. Case strength score will adjust once incident context is provided.": "પ્રારંભિક વિગતો બાકી છે. ઘટનાનો સંદર્ભ આપ્યા પછી કેસની મજબૂતાઈનો સ્કોર સમાયોજિત કરવામાં આવશે.",
+    "Please detail your legal inquiry in the chat window. LexiGuard will compile an executive case summary here.": "કૃપા કરીને ચેટ વિન્ડોમાં તમારી કાનૂની પૂછપરછની વિગતો આપો. LexiGuard અહીં એક કાર્યકારી કેસ સારાંશ તૈયાર કરશે.",
+    "Explain the facts of your dispute to generate action items.": "ક્રિયાત્મક વસ્તુઓ જનરેટ કરવા માટે તમારા વિવાદની હકીકતો સમજાવો.",
+    "Initial Consultation": "પ્રારંભિક પરામર્શ",
+    "LexiGuard intake chat session started.": "LexiGuard સેવન ચેટ સત્ર શરૂ થયું.",
+    "Fact Verification": "હકીકત ચકાસણી",
+    "Review supporting evidence items checklist.": "સહાયક પુરાવા વસ્તુઓની ચેકલિસ્ટની સમીક્ષા કરો.",
+    "Draft demand / representation": "માંગણી / રજૂઆતનો ડ્રાફ્ટ બનાવો",
+    "Document assembly in the Legal Toolkit.": "કાનૂની ટૂલકિટમાં દસ્તાવેજ એસેમ્બલી.",
+
     // Product Tour
     "tour_step1_title": "તમારો કાનૂની મુદ્દો જણાવો",
-    "tour_step1_desc": "અહીં તમારો કાનૂની પ્રશ્ન ટાઇપ કરો અથવા તમારા વિવાદનું વર્ણન કરો. ન્યાયAI તરત જ તેનું વિશ્લેષણ કરશે.",
+    "tour_step1_desc": "અહીં તમારો કાનૂની પ્રશ્ન ટાઇપ કરો અથવા તમારા વિવાદનું વર્ણન કરો. LexiGuard તરત જ તેનું વિશ્લેષણ કરશે.",
     "tour_step2_title": "પુરાવા અપલોડ કરો",
     "tour_step2_desc": "વિશ્લેષણ માટે અહીં કરારો, રસીદો, સ્ક્રીનશોટ અથવા અન્ય પુરાવા અપલોડ કરો.",
     "tour_step3_title": "દસ્તાવેજ વિશ્લેષણ",
@@ -787,11 +928,68 @@ export const translations: Record<Language, Record<string, string>> = {
     "help_menu": "સહાય",
     "relaunch_tour": "ટૂર ફરી શરૂ કરો",
     "load_judge_demo": "જજ ડેમો લોડ કરો",
-    "help_about": "ન્યાયAI વિશે",
+    "help_about": "LexiGuard વિશે",
+    "compliance_footer": "LexiGuard અનુપાલન સૂટ • તબક્કો 1",
+    "language_label": "ભાષા",
 
-    // Misc
-    "compliance_footer": "ન્યાયAI અનુપાલન સૂટ • તબક્કો 1",
-    "language_label": "ભાષા"
+    // Landlord Demo translations
+    "My landlord is refusing to return my security deposit of $1,500. He claims there are damages, but we cleaned the house completely and took photos.": "મારો મકાનમાલિક મારી $1,500 ની સિક્યોરિટી ડિપોઝિટ પરત કરવાનો ઇનકાર કરી રહ્યો છે. તે દાવો કરે છે કે નુકસાન થયું છે, પરંતુ અમે ઘરને સંપૂર્ણપણે સાફ કર્યું અને ફોટા લીધા.",
+    "Under standard rental laws, a landlord must return the security deposit within a specific period (usually 14–30 days depending on your jurisdiction) or provide an itemized list of deductions for damages beyond normal wear and tear.\n\nSince you have photos showing the clean state of the apartment, we have strong evidence to contest this. Let's start by reviewing your lease agreement and drafting a formal Demand Notice.": "પ્રમાણભૂત ભાડાના કાયદા હેઠળ, મકાનમાલિકે સિક્યોરિટી ડિપોઝિટ ચોક્કસ સમયગાળાની અંદર (સામાન્ય રીતે તમારા અધિકારક્ષેત્રના આધારે 14-30 દિવસ) પરત કરવી આવશ્યક છે અથવા સામાન્ય ઘસારાથી વધુ નુકસાન માટે કપાતની વિગતવાર સૂચિ પ્રદાન કરવી આવશ્યક છે.\n\nતમારી પાસે એપાર્ટમેન્ટની સાફ સ્થિતિ દર્શાવતા ફોટા હોવાથી, અમારી પાસે આનો સામનો કરવા માટે મજબૂત પુરાવા છે. ચાલો તમારા લીઝ કરારની સમીક્ષા કરીને અને ઔપચારિક માંગણી નોટિસનો મુસદ્દો તૈયાર કરીને શરૂઆત કરીએ.",
+    "Dispute regarding the return of a $1,500 security deposit. Tenant claims normal wear and tear and has photo documentation. Landlord claims damages but failed to provide an itemized receipt.": "$1,500 સિક્યોરિટી ડિપોઝિટ પરત કરવા અંગેનો વિવાદ. ભાડૂઆત સામાન્ય ઘસારાનો દાવો કરે છે અને તેની પાસે ફોટો પુરાવા છે. મકાનમાલિક નુકસાનનો દાવો કરે છે પરંતુ વિગતવાર રસીદ આપવામાં નિષ્ફળ ગયો.",
+    "Civil Code Section 1950.5 (Security Deposit Regulations)": "સિવિલ કોડ સેક્શન 1950.5 (સિક્યોરિટી ડિપોઝિટ નિયમો)",
+    "State Fair Housing and Tenant Protection Act": "રાજ્ય ફેર હાઉસિંગ અને ભાડૂઆત સુરક્ષા કાયદો",
+    "Monitor the 14-day reply window. If no reply, proceed to prepare Small Claims Court petition.": "14-દિવસની ઉત્તર વિન્ડો પર નજર રાખો. જો કોઈ જવાબ ન મળે, તો સ્મોલ ક્લેમ્સ કોર્ટની પિટિશન તૈયાર કરવા આગળ વધો.",
+    "Lease Agreement Terminated": "લીઝ કરાર સમાપ્ત",
+    "Tenancy ended and key handover completed.": "ભાડૂઆત સમયગાળો પૂરો થયો અને ચાવી સોંપણી પૂર્ણ થઈ.",
+    "Demand Notice Served": "માંગણી નોટિસ મોકલાઈ",
+    "Served formal demand letter for return of security deposit.": "સિક્યોરિટી ડિપોઝિટ પરત કરવા માટે ઔપચારિક માંગણી પત્ર મોકલાયો.",
+    "Landlord Reply Window": "મકાનમાલિક ઉત્તર વિન્ડો",
+    "Awaiting landlord response or payment. Default deadline is 14 days.": "મકાનમાલિકના પ્રતિભાવ અથવા ચુકવણીની રાહ જોવાઈ રહી છે. ડિફોલ્ટ સમયમર્યાદા 14 દિવસ છે.",
+    "Small Claims Filing": "સ્મોલ ક્લેમ્સ ફાઇલિંગ",
+    "File a petition in Small Claims Court if no response is received.": "જો કોઈ પ્રતિસાદ ન મળે તો સ્મોલ ક્લેમ્સ કોર્ટમાં પિટિશન ફાઇલ કરો.",
+    "Move-out photographs verify the premises are in clean, undamaged condition.": "ખાલી કરતી વખતના ફોટા ચકાસે છે કે જગ્યા સાફ અને નુકસાન વગરની સ્થિતિમાં છે.",
+    "Landlord failed to provide an itemized statement within the statutory 21-day window.": "મકાનમાલિક વૈધાનિક 21-દિવસની વિન્ડોમાં વિગતવાર સ્ટેટમેન્ટ પ્રદાન કરવામાં નિષ્ફળ રહ્યો.",
+    "Written communications show the landlord acknowledged the lease termination without prior complaints.": "લેખિત પત્રવ્યવહાર દર્શાવે છે કે મકાનમાલિકે અગાઉની કોઈ ફરિયાદ વિના લીઝની સમાપ્તિ સ્વીકારી હતી.",
+    "Signed Rent Agreement for flat 2B, 104 Park Avenue. Specifies security deposit of $1,500.": "ફ્લેટ 2B, 104 પાર્ક એવન્યુ માટે હસ્તાક્ષરિત ભાડા કરાર. $1,500 ની સિક્યોરિટી ડિપોઝિટ સ્પષ્ટ કરે છે.",
+    "Security Deposit Clause": "સિક્યોરિટી ડિપોઝિટ ક્લોઝ",
+    "Tenant pays $1,500 security deposit to be refunded within 14 days of move-out.": "ભાડૂઆત $1,500 સિક્યોરિટી ડિપોઝિટ ચૂકવે છે જે ખાલી કર્યાના 14 દિવસમાં પરત કરવાની રહેશે.",
+    "Notice Period Clause": "નોટિસ પિરિયડ ક્લોઝ",
+    "Either party must give 30 days notice prior to terminating lease.": "કોઈપણ પક્ષે લીઝ સમાપ્ત કરતા પહેલા 30 દિવસની નોટિસ આપવી પડશે.",
+    "Pay rent monthly by 5th day": "દર મહિને 5મી તારીખ સુધીમાં ભાડું ચૂકવવું",
+    "Return property in clean condition": "જગ્યા સાફ સ્થિતિમાં પરત કરવી",
+    "14 days post lease termination": "લીઝ સમાપ્તિના 14 દિવસ પછી",
+    "Refund security deposit": "સિક્યોરિટી ડિપોઝિટ પરત કરવી",
+    "Rent Agreement specifying tenancy terms and deposit obligations.": "ભાડૂઆતની શરતો અને ડિપોઝિટ જવાબદારીઓ દર્શાવતો ભાડા કરાર.",
+    
+    // Recommendations & advisor
+    "Generate Security Deposit Demand Notice": "સિક્યોરિટી ડિપોઝિટ માંગણી નોટિસ બનાવો",
+    "All critical evidence is collected. You can now generate the demand notice template to send to the landlord.": "તમામ મહત્વપૂર્ણ પુરાવા એકત્રિત કરવામાં આવ્યા છે. હવે તમે મકાનમાલિકને મોકલવા માટે માંગણી નોટિસ ટેમ્પલેટ બનાવી શકો છો.",
+    "Send Security Deposit Demand Notice": "સિક્યોરિટી ડિપોઝિટ માંગણી નોટિસ મોકલો",
+    "Formally demand the refund of the security deposit within the legal notice period before proceeding to litigation.": "મુકદ્દમો શરૂ કરતા પહેલા કાનૂની નોટિસના સમયગાળામાં સિક્યોરિટી ડિપોઝિટ પરત કરવાની ઔપ્યારિક માંગ કરો.",
+    "Written agreement establishes lease terms and deposit refund conditions.": "લેખિત કરાર ભાડાની શરતો અને ડિપોઝિટ પરત કરવાની શરતો સ્થાપિત કરે છે.",
+    "Rent or Lease Agreement": "ભાડા અથવા લીઝ કરાર",
+    "Payment proof strengthens claims of actual deposit payment.": "ચુકવણીનો પુરાવો વાસ્તવિક ડિપોઝિટ ચુકવણીના દાવાને મજબૂત બનાવે છે.",
+    "Bank statement, bank receipt, or transaction screenshot": "બેંક સ્ટેટમેન્ટ, બેંક રસીદ કે વ્યવહારનો સ્ક્રીનશોટ",
+    "Communication logs establish deposit demand and landlord refusal timeline.": "પત્રવ્યવહાર લોગ ડિપોઝિટ માંગણી અને મકાનમાલિકના ઇનકારની સમયરેખા સ્થાપિત કરે છે.",
+    "WhatsApp screenshots or chat export": "વોટ્સએપ સ્ક્રીનશોટ અથવા ચેટ એક્સપોર્ટ",
+    "Handover proof confirms the date vacancy occurred and lease ended.": "સોંપણીનો પુરાવો પુષ્ટિ કરે છે કે જગ્યા કઈ તારીખે ખાલી થઈ અને લીઝ સમાપ્ત થઈ.",
+    "Property handover or keys return slip": "જગ્યા સોંપણી અથવા ચાવી પરત કરવાની સ્લિપ",
+    "Witness statements back up verbal discussions and physical condition.": "સાક્ષીઓના નિવેદનો મૌખિક ચર્ચાઓ અને ભૌતિક સ્થિતિને સમર્થન આપે છે.",
+    "Signed witness declaration or statement": "હસ્તાક્ષરિત સાક્ષીનું નિવેદન કે જાહેરાત",
+    "Photos/videos document property condition and avoid wear-and-tear claims.": "ફોટા/વીડિયો જગ્યાની સ્થિતિ દર્શાવે છે અને સામાન્ય ઘસારાના દાવાઓથી બચાવે છે.",
+    "Condition photographs or video walk-through": "જગ્યાના ફોટા અથવા વીડિયો વૉક-થ્રૂ"
   }
 };
+
+export function translateKey(key: string, lang: Language): string {
+  const langDict = translations[lang];
+  if (langDict && langDict[key]) {
+    return langDict[key];
+  }
+  const engDict = translations['en'];
+  if (engDict && engDict[key]) {
+    return engDict[key];
+  }
+  return key;
+}
 

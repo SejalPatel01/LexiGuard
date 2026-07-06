@@ -1,0 +1,20 @@
+{
+  "domain": "Landlord",
+  "scenario": "malformed",
+  "query": "Query containing lowercase and malformed names for Landlord.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Parties: rajesh landlord and suresh tenant.",
+    "analysis": {
+      "summary": "Malformed document.",
+      "entities": {
+        "names": [
+          "rajesh landlord",
+          "suresh tenant"
+        ]
+      },
+      "detectedDocType": "Rent Agreement"
+    }
+  }
+}

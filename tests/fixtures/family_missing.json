@@ -1,0 +1,17 @@
+{
+  "domain": "Family",
+  "scenario": "missing",
+  "query": "Unverified claim without bank proof or secondary files for Family.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Simple document stub.",
+    "analysis": {
+      "summary": "Stub document.",
+      "entities": {
+        "names": []
+      },
+      "detectedDocType": "Other"
+    }
+  }
+}

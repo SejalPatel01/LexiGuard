@@ -13,11 +13,11 @@
   }
   :root {
 
-    --background: oklch(1 0 0);
+    --background: #FAF9FB;
 
     --foreground: oklch(0.145 0 0);
 
-    --card: oklch(1 0 0);
+    --card: #FFFFFF;
 
     --card-foreground: oklch(0.145 0 0);
 
@@ -79,11 +79,11 @@
   }
   .dark {
 
-    --background: oklch(0.145 0 0);
+    --background: #080B11;
 
     --foreground: oklch(0.985 0 0);
 
-    --card: oklch(0.205 0 0);
+    --card: #0D111A;
 
     --card-foreground: oklch(0.985 0 0);
 

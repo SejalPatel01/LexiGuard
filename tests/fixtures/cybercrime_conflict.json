@@ -1,0 +1,26 @@
+{
+  "domain": "Cybercrime",
+  "scenario": "conflict",
+  "query": "Dispute claiming ₹30,000 value for Cybercrime.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Parties: Rajesh Landlord and Suresh Tenant. Contract specifies Rs 45,000.",
+    "analysis": {
+      "summary": "Conflict document with Rs 45,000.",
+      "entities": {
+        "names": [
+          "Rajesh Landlord",
+          "Suresh Tenant"
+        ],
+        "amounts": [
+          "Rs 45,000"
+        ],
+        "depositValues": [
+          "Rs 45,000"
+        ]
+      },
+      "detectedDocType": "Lease Agreement"
+    }
+  }
+}

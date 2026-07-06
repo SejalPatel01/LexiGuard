@@ -133,21 +133,26 @@ class ComposerSimulation {
       }));
 
       const res = await runLegalAssessment(promptText, historyContext);
+      if ('isBlocked' in res && res.isBlocked) {
+        throw new Error(`Security block triggered unexpectedly: ${res.reason}`);
+      }
       if ('error' in res) {
         throw new Error(`Orchestrator error: ${res.error}`);
       }
 
+      const resSuccess = res as any;
+
       const assistantMsg: Message = {
         id: `msg-a-prompt-${Date.now()}`,
         role: 'assistant',
-        content: res.advice.text,
+        content: resSuccess.advice.text,
         timestamp: '12:01 PM'
       };
 
       this.chatState.messages.push(assistantMsg);
 
       // Map timeline, summary, and checklist updates from orchestrator
-      const mappedChecklist = res.actions.checklist.map((label: string) => {
+      const mappedChecklist = resSuccess.actions.checklist.map((label: string) => {
         const existing = this.chatState.checklist.find(
           (item) => item.label.toLowerCase() === label.toLowerCase()
         );

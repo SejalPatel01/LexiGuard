@@ -57,7 +57,7 @@ export async function exportToPDF(title: string, text: string): Promise<void> {
 
     // 4. Save file
     const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-    doc.save(`nyayai_${safeName}.pdf`);
+    doc.save(`lexiguard_${safeName}.pdf`);
     console.log('[pdf-export] PDF file downloaded successfully.');
   } catch (error) {
     console.error('[pdf-export] Failed to export PDF:', error);

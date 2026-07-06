@@ -68,6 +68,12 @@ export function safeJsonParse<T>(rawText: string, defaultValue: T): T {
         return `"${escaped}"`;
       });
       
+      // C. Repair missing closing braces before commas in array of objects
+      repaired = repaired.replace(/("|\d|true|false|null)\s*,\s*{/g, '$1}, {');
+
+      // D. Repair missing closing braces before closing array brackets
+      repaired = repaired.replace(/("[^"]*"\s*:\s*(?:"[^"]*"|\d+|true|false|null))\s*\]/g, '$1} ]');
+      
       const parsedRepaired = JSON.parse(repaired);
       console.log('[SAFE-JSON] JSON repair succeeded.');
       console.log('[SAFE-JSON] --- Parsed (Repaired) Response ---');

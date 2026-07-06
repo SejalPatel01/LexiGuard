@@ -27,13 +27,14 @@ import { Chat, GeneratedDoc } from '@/types';
 import { cn } from '@/lib/utils';
 import { useChats, calculateEvidenceGaps, generateNextActionRecommendation, detectCaseCategory } from '@/hooks/use-chats';
 import { exportToPDF } from '@/services/pdf-export';
+import { translateKey } from '@/lib/translations';
 
 // --- CARD WRAPPER ---
 function ToolkitCard({ title, icon: Icon, children }: { title: string; icon: React.ComponentType<{ className?: string }>; children: React.ReactNode }) {
   return (
     <div className="bg-card text-card-foreground border border-border/80 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
       <div className="flex items-center gap-2 border-b border-border/50 pb-2.5 mb-3">
-        <Icon className="size-4 text-primary dark:text-amber-500 shrink-0" />
+        <Icon className="size-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
         <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{title}</h3>
       </div>
       {children}
@@ -47,21 +48,14 @@ interface EvidenceChecklistProps {
   onToggle: (id: string) => void;
 }
 export function EvidenceChecklistCard({ checklist, onToggle }: EvidenceChecklistProps) {
-  const { t } = useChats();
+  const { activeChat } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
 
   // Deduplicate items by ID to guarantee uniqueness in React children rendering
   const uniqueChecklist = Array.from(new Map(checklist.map(item => [item.id, item])).values());
 
-  // Log every checklist item key rendered
-  uniqueChecklist.forEach((item) => console.log("Checklist Key:", item.id, "| Generated Key:", item.id, "| Component: EvidenceChecklistCard"));
 
-  // Print a debugging table of IDs and labels
-  console.table(
-    uniqueChecklist.map(i => ({
-      id: i.id,
-      label: i.label
-    }))
-  );
 
   const completed = uniqueChecklist.filter((item) => item.checked).length;
   const total = uniqueChecklist.length;
@@ -81,7 +75,7 @@ export function EvidenceChecklistCard({ checklist, onToggle }: EvidenceChecklist
         {/* Progress Bar */}
         <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-amber-500 to-indigo-500 rounded-full transition-all duration-500" 
+            className="h-full bg-gradient-to-r from-blue-700 to-purple-600 dark:from-blue-600 dark:to-purple-500 rounded-full transition-all duration-500" 
             style={{ width: `${percent}%` }}
           />
         </div>
@@ -106,7 +100,7 @@ export function EvidenceChecklistCard({ checklist, onToggle }: EvidenceChecklist
                   <Square className="size-3.5" />
                 )}
               </span>
-              <span className="leading-tight">{t(item.label)}</span>
+              <span className="leading-tight">{activeChat && activeChat.messages.length > 0 ? item.label : t(item.label)}</span>
             </div>
           ))}
         </div>
@@ -118,7 +112,9 @@ export function EvidenceChecklistCard({ checklist, onToggle }: EvidenceChecklist
 // --- 2. CASE STRENGTH CARD ---
 export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStrength'] }) {
   const { score, riskLevel, riskFactors } = caseStrength;
-  const { t } = useChats();
+  const { activeChat } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
   
   const getRiskDetails = () => {
     switch (riskLevel) {
@@ -126,23 +122,23 @@ export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStr
       case 'Strong Case':
         return { 
           icon: ShieldCheck, 
-          color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20', 
-          bar: 'bg-emerald-500',
+          color: 'text-indigo-600 bg-indigo-50 border-indigo-100 dark:text-indigo-300 dark:bg-indigo-950/40 dark:border-indigo-900/60 shadow-sm', 
+          bar: 'bg-gradient-to-r from-blue-700 to-purple-600 dark:from-blue-600 dark:to-purple-500',
           label: t('strong_case')
         };
       case 'Medium':
         return { 
           icon: AlertTriangle, 
-          color: 'text-amber-500 bg-amber-500/10 border-amber-500/20', 
-          bar: 'bg-amber-500',
+          color: 'text-indigo-600 bg-indigo-50 border-indigo-100 dark:text-indigo-300 dark:bg-indigo-950/40 dark:border-indigo-900/60 shadow-sm', 
+          bar: 'bg-gradient-to-r from-blue-700 to-purple-600 dark:from-blue-600 dark:to-purple-500',
           label: t('medium_risk')
         };
       case 'High':
       default:
         return { 
           icon: ShieldAlert, 
-          color: 'text-rose-500 bg-rose-500/10 border-rose-500/20', 
-          bar: 'bg-rose-500',
+          color: 'text-indigo-600 bg-indigo-50 border-indigo-100 dark:text-indigo-300 dark:bg-indigo-950/40 dark:border-indigo-900/60 shadow-sm', 
+          bar: 'bg-gradient-to-r from-blue-700 to-purple-600 dark:from-blue-600 dark:to-purple-500',
           label: t('high_risk')
         };
     }
@@ -158,7 +154,7 @@ export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStr
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('eval_score')}</span>
-            <span className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-amber-500 to-indigo-500 bg-clip-text text-transparent">
+            <span className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               {score}%
             </span>
           </div>
@@ -172,7 +168,7 @@ export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStr
         {/* Linear Progress Score bar */}
         <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
           <div 
-            className={cn("h-full rounded-full transition-all duration-500", risk.bar)}
+            className="h-full rounded-full bg-gradient-to-r from-blue-700 to-purple-600 dark:from-blue-600 dark:to-purple-500 transition-all duration-500"
             style={{ width: `${score}%` }}
           />
         </div>
@@ -185,8 +181,8 @@ export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStr
           <ul className="space-y-2">
             {riskFactors.map((factor, idx) => (
               <li key={idx} className="flex items-start gap-1.5 text-xs text-foreground/80 leading-normal pl-0.5">
-                <span className="size-1 rounded-full bg-primary dark:bg-amber-500 shrink-0 mt-1.5" />
-                <span>{factor}</span>
+                <span className="size-1 rounded-full bg-indigo-600 dark:bg-purple-400 shrink-0 mt-1.5" />
+                <span>{activeChat && activeChat.messages.length > 0 ? factor : t(factor)}</span>
               </li>
             ))}
           </ul>
@@ -199,10 +195,11 @@ export function CaseStrengthCard({ caseStrength }: { caseStrength: Chat['caseStr
 // --- 3. ACTION TIMELINE CARD ---
 export function ActionTimelineCard({ timeline }: { timeline: Chat['timeline'] }) {
   const uniqueTimeline = Array.from(new Map(timeline.map(e => [e.id, e])).values());
-  const { t } = useChats();
+  const { activeChat } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
 
-  // Log every timeline event key rendered
-  uniqueTimeline.forEach((event) => console.log("Timeline Key:", event.id, "| Generated Key:", event.id, "| Component: ActionTimelineCard"));
+
 
   const getStatusLabel = (status: string) => {
     if (status === 'completed') return t('status_completed');
@@ -226,7 +223,7 @@ export function ActionTimelineCard({ timeline }: { timeline: Chat['timeline'] })
                   isCompleted 
                     ? "bg-emerald-500 border-emerald-500 shadow-md shadow-emerald-500/20" 
                     : isCurrent 
-                      ? "bg-primary border-primary animate-pulse shadow-md shadow-primary/20 dark:bg-amber-500 dark:border-amber-500"
+                      ? "bg-indigo-600 border-indigo-600 animate-pulse shadow-md shadow-indigo-500/20 dark:bg-indigo-500 dark:border-indigo-500"
                       : "bg-card border-border"
                 )}
               />
@@ -238,19 +235,18 @@ export function ActionTimelineCard({ timeline }: { timeline: Chat['timeline'] })
                   <span className={cn(
                     "uppercase tracking-wider px-1.5 py-0.5 rounded",
                     isCompleted 
-                      ? "text-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10" 
-                      : isCurrent 
-                        ? "text-primary bg-primary/5 dark:text-amber-400 dark:bg-amber-500/10" 
+                      ? "text-emerald-700 bg-emerald-500/10 dark:text-emerald-400 dark:bg-emerald-500/15" 
+                      : isCurrent ? "text-indigo-600 bg-indigo-500/10 dark:text-indigo-400 dark:bg-indigo-500/15" 
                         : "text-muted-foreground/60 bg-muted"
                   )}>
                     {getStatusLabel(event.status)}
                   </span>
                 </div>
-                <h4 className="text-xs font-bold text-foreground leading-snug group-hover:text-primary dark:group-hover:text-amber-400 transition-colors">
-                  {event.title}
+                <h4 className="text-xs font-bold text-foreground leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  {activeChat && activeChat.messages.length > 0 ? event.title : t(event.title)}
                 </h4>
                 <p className="text-[11px] text-muted-foreground leading-normal pr-1">
-                  {event.description}
+                  {activeChat && activeChat.messages.length > 0 ? event.description : t(event.description)}
                 </p>
               </div>
             </div>
@@ -264,10 +260,11 @@ export function ActionTimelineCard({ timeline }: { timeline: Chat['timeline'] })
 // --- 4. GENERATED DOCUMENTS CARD ---
 export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedDoc[] }) {
   const uniqueDocs = Array.from(new Map(generatedDocs.map(doc => [doc.id, doc])).values());
-  const { generateCustomDoc, updateGeneratedDoc, isQuotaExhausted, language, t } = useChats();
+  const { generateCustomDoc, updateGeneratedDoc, isQuotaExhausted, activeChat } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
 
-  // Log every document key rendered
-  uniqueDocs.forEach((doc) => console.log("Document Key:", doc.id, "| Generated Key:", doc.id, "| Component: GeneratedDocsCard"));
+
 
   const [activeDoc, setActiveDoc] = useState<GeneratedDoc | null>(null);
   const [copied, setCopied] = useState(false);
@@ -310,13 +307,13 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
   };
 
   const getDocTypeTranslation = (type: string) => {
-    if (type === 'Demand Notice') return language === 'hi' ? 'मांग नोटिस' : language === 'gu' ? 'માંગ નોટિસ' : 'Demand Notice';
-    if (type === 'Refund Notice') return language === 'hi' ? 'वापसी नोटिस' : language === 'gu' ? 'રિફંડ નોટિસ' : 'Refund Notice';
-    if (type === 'Deposit Recovery Notice') return language === 'hi' ? 'जमा वसूली नोटिस' : language === 'gu' ? 'ડિપોઝિટ વસૂલાત નોટિસ' : 'Deposit Recovery Notice';
-    if (type === 'Consumer Complaint Letter') return language === 'hi' ? 'उपभोक्ता शिकायत पत्र' : language === 'gu' ? 'ગ્રાહક ફરિયાદ પત્ર' : 'Consumer Complaint Letter';
-    if (type === 'Landlord Deposit Complaint') return language === 'hi' ? 'मकान मालिक जमा शिकायत' : language === 'gu' ? 'મકાનમાલિક ડિપોઝિટ ફરિયાદ' : 'Landlord Deposit Complaint';
-    if (type === 'Employment Complaint') return language === 'hi' ? 'रोजगार शिकायत' : language === 'gu' ? 'રોજગાર ફરિયાદ' : 'Employment Complaint';
-    if (type === 'Cybercrime Complaint') return language === 'hi' ? 'साइबर अपराध शिकायत' : language === 'gu' ? 'સાયબર ક્રાઇમ ફરિયાદ' : 'Cybercrime Complaint';
+    if (type === 'Demand Notice') return tkLang === 'hi' ? 'मांग नोटिस' : tkLang === 'gu' ? 'માંગ નોટિસ' : 'Demand Notice';
+    if (type === 'Refund Notice') return tkLang === 'hi' ? 'वापसी नोटिस' : tkLang === 'gu' ? 'રિફંડ નોટિસ' : 'Refund Notice';
+    if (type === 'Deposit Recovery Notice') return tkLang === 'hi' ? 'जमा वसूली नोटिस' : tkLang === 'gu' ? 'ડિપોઝિટ વસૂલાત નોટિસ' : 'Deposit Recovery Notice';
+    if (type === 'Consumer Complaint Letter') return tkLang === 'hi' ? 'उपभोक्ता शिकायत पत्र' : tkLang === 'gu' ? 'ગ્રાહક ફરિયાદ પત્ર' : 'Consumer Complaint Letter';
+    if (type === 'Landlord Deposit Complaint') return tkLang === 'hi' ? 'मकान मालिक जमा शिकायत' : tkLang === 'gu' ? 'મકાનમાલિક ડિપોઝિટ ફરિયાદ' : 'Landlord Deposit Complaint';
+    if (type === 'Employment Complaint') return tkLang === 'hi' ? 'रोजगार शिकायत' : tkLang === 'gu' ? 'રોજગાર ફરિયાદ' : 'Employment Complaint';
+    if (type === 'Cybercrime Complaint') return tkLang === 'hi' ? 'साइबर अपराध शिकायत' : tkLang === 'gu' ? 'સાયબર ક્રાઇમ ફરિયાદ' : 'Cybercrime Complaint';
     return type;
   };
 
@@ -394,7 +391,7 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
                   className="flex items-center justify-between p-2 rounded-lg border border-border bg-muted/40 hover:bg-muted cursor-pointer transition-colors select-none group"
                 >
                   <div className="flex items-center gap-2 overflow-hidden pr-3">
-                    <FileText className="size-4 text-amber-500 shrink-0" />
+                    <FileText className="size-4 text-indigo-600 dark:text-purple-400 shrink-0" />
                     <div className="flex flex-col min-w-0">
                       <span className="text-xs font-bold text-foreground truncate">{doc.title}</span>
                       <span className="text-[10px] text-muted-foreground">{doc.type} • {doc.date}</span>
@@ -428,7 +425,7 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-border/80 bg-muted/20 dark:bg-muted/10">
               <div className="flex items-center gap-2">
-                <FileText className="size-5 text-amber-500" />
+                <FileText className="size-5 text-indigo-600 dark:text-purple-400" />
                 <div>
                   <h3 className="text-sm font-bold text-foreground leading-none">{activeDoc.title}</h3>
                   <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
@@ -456,7 +453,7 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
                   rows={20}
-                  className="w-full font-serif text-sm leading-relaxed p-4 border border-border bg-white dark:bg-zinc-900 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-amber-500"
+                  className="w-full font-serif text-sm leading-relaxed p-4 border border-border bg-white dark:bg-zinc-900 rounded-lg shadow-sm outline-none focus:ring-1 focus:ring-indigo-500"
                 />
               ) : (
                 <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 sm:p-8 rounded-lg shadow-sm whitespace-pre-wrap">
@@ -527,7 +524,7 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
                     setActiveDoc(null);
                     setIsEditing(false);
                   }}
-                  className="py-1.5 px-3.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md shadow-amber-500/10"
+                  className="py-1.5 px-3.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-800 hover:to-purple-700 text-white shadow-md shadow-purple-500/10"
                 >
                   {t('close_preview')}
                 </button>
@@ -542,7 +539,9 @@ export function GeneratedDocsCard({ generatedDocs }: { generatedDocs: GeneratedD
 
 // --- 5. CASE SUMMARY CARD ---
 export function CaseSummaryCard({ summary }: { summary: Chat['summary'] }) {
-  const { activeChat, t } = useChats();
+  const { activeChat } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
   const { overview, legalProvisions, nextAction } = summary;
 
   if (!activeChat) return null;
@@ -553,9 +552,9 @@ export function CaseSummaryCard({ summary }: { summary: Chat['summary'] }) {
 
   const handleExportSummaryPDF = () => {
     const summaryText = `CASE SUMMARY ASSESSMENT REPORT
-Generated by NyayaAI • Legal Guardian AI
+Generated by LexiGuard • Legal Guardian AI
 
-ISSUE CATEGORY: ${activeChat.title}
+ISSUE CATEGORY: ${activeChat.title === 'New Case Inquiry' ? t('New Case Inquiry') : activeChat.title}
 
 1. EXECUTIVE OVERVIEW:
 ${overview}
@@ -581,7 +580,7 @@ ${activeChat.timeline.map(step => `- ${step.date}: ${step.title} — ${step.desc
 ---
 DISCLAIMER: This case summary report is generated using generative AI for informational purposes only. It does not constitute formal legal counsel or advocate advice.`;
 
-    exportToPDF(`Case Summary - ${activeChat.title}`, summaryText);
+    exportToPDF(`Case Summary - ${activeChat.title === 'New Case Inquiry' ? t('New Case Inquiry') : activeChat.title}`, summaryText);
   };
 
   return (
@@ -593,7 +592,7 @@ DISCLAIMER: This case summary report is generated using generative AI for inform
             {t('exec_overview')}
           </span>
           <p className="text-xs text-foreground/80 leading-normal">
-            {overview}
+            {activeChat && activeChat.messages.length > 0 ? overview : t(overview)}
           </p>
         </div>
 
@@ -607,7 +606,7 @@ DISCLAIMER: This case summary report is generated using generative AI for inform
               {legalProvisions.map((provision, idx) => (
                 <span 
                   key={idx} 
-                  className="text-[10px] font-semibold text-primary dark:text-amber-400 bg-primary/5 dark:bg-amber-500/10 border border-primary/10 dark:border-amber-500/10 rounded px-2 py-0.5"
+                  className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/60 rounded px-2 py-0.5"
                 >
                   {provision}
                 </span>
@@ -631,9 +630,9 @@ DISCLAIMER: This case summary report is generated using generative AI for inform
           <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
             {t('next_action_label')}
           </span>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-primary dark:text-amber-400 leading-tight">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 leading-tight">
             <ArrowRight className="size-3.5 shrink-0" />
-            <span>{nextAction}</span>
+            <span>{activeChat && activeChat.messages.length > 0 ? nextAction : t(nextAction)}</span>
           </div>
         </div>
 
@@ -654,19 +653,23 @@ DISCLAIMER: This case summary report is generated using generative AI for inform
 
 // --- 6. DOCUMENT SIMPLIFIER CARD ---
 export function DocumentSimplifierCard() {
-  const { activeChat, removeUploadedDoc, t } = useChats();
+  const { activeChat, removeUploadedDoc } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
   const [activeTab, setActiveTab] = useState<'summary' | 'clauses' | 'obligations' | 'risks' | 'deadlines'>('summary');
   const [showRawText, setShowRawText] = useState(false);
 
   if (!activeChat || !activeChat.uploadedDoc) return null;
 
-  const { name, type, text, analysis } = activeChat.uploadedDoc;
+  const { name, type, text } = activeChat.uploadedDoc;
+  const cache = activeChat.uploadedDoc.analysisTranslationCache;
+  const analysis = (cache && cache[tkLang]) ? cache[tkLang] : activeChat.uploadedDoc.analysis;
 
   const handleExportAnalysisPDF = () => {
     const analysisText = `DOCUMENT SIMPLIFICATION ANALYSIS REPORT
 File Name: ${name}
 Format: ${type}
-Analyzed by NyayaAI • Document Simplifier Agent
+Analyzed by LexiGuard • Document Simplifier Agent
 
 1. PLAIN ENGLISH SUMMARY:
 ${analysis.summary}
@@ -691,12 +694,15 @@ DISCLAIMER: This analysis is compiled using AI translation. Verify exact wording
     exportToPDF(`Simplification - ${name}`, analysisText);
   };
 
-  const getRiskBadgeColor = (risk: 'Low' | 'Medium' | 'High') => {
-    switch (risk) {
-      case 'Low': return 'text-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/10';
-      case 'Medium': return 'text-amber-500 bg-amber-500/5 dark:bg-amber-500/10 border-amber-500/10';
-      case 'High': return 'text-rose-500 bg-rose-500/5 dark:bg-rose-500/10 border-rose-500/10';
+  const getRiskBadgeColor = (risk: string) => {
+    const riskNorm = risk ? risk.toLowerCase() : '';
+    if (riskNorm.includes('low') || riskNorm.includes('कम') || riskNorm.includes('ઓછું')) {
+      return 'text-indigo-600 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-950/40 border-indigo-100 dark:border-indigo-900/60';
     }
+    if (riskNorm.includes('medium') || riskNorm.includes('मध्यम') || riskNorm.includes('મધ્યમ')) {
+      return 'text-indigo-600 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-950/40 border-indigo-100 dark:border-indigo-900/60';
+    }
+    return 'text-indigo-600 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-950/40 border-indigo-100 dark:border-indigo-900/60';
   };
 
   const getTabLabel = (tab: string) => {
@@ -714,7 +720,7 @@ DISCLAIMER: This analysis is compiled using AI translation. Verify exact wording
           {/* Document File metadata row */}
           <div className="flex items-center justify-between p-2 rounded-lg bg-muted/30 dark:bg-muted/15 border border-border/80 select-none">
             <div className="flex items-center gap-2 overflow-hidden pr-2">
-              <FileText className="size-4.5 text-amber-500 shrink-0" />
+              <FileText className="size-4.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-foreground truncate leading-tight">{name}</span>
                 <span className="text-[9px] text-muted-foreground uppercase tracking-wide">
@@ -741,7 +747,7 @@ DISCLAIMER: This analysis is compiled using AI translation. Verify exact wording
                 className={cn(
                   "px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all",
                   activeTab === tab 
-                    ? "bg-primary text-white dark:bg-amber-500 dark:text-zinc-950 shadow-sm" 
+                    ? "bg-indigo-600 text-white dark:bg-indigo-600 dark:text-white shadow-sm" 
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
@@ -814,10 +820,10 @@ DISCLAIMER: This analysis is compiled using AI translation. Verify exact wording
                   </p>
                 ) : (
                   analysis.deadlines.map((dl, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg border border-dashed border-border bg-amber-500/5">
-                      <Calendar className="size-4 text-amber-500 shrink-0 mt-0.5" />
+                     <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg border border-dashed border-indigo-100 bg-indigo-50/50 dark:bg-indigo-950/20">
+                      <Calendar className="size-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
                       <div className="flex flex-col min-w-0">
-                        <span className="text-xs font-bold text-amber-600 dark:text-amber-400">{dl.date}</span>
+                        <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{dl.date}</span>
                         <span className="text-[11px] text-foreground/80 leading-snug">{dl.action}</span>
                       </div>
                     </div>
@@ -838,7 +844,7 @@ DISCLAIMER: This analysis is compiled using AI translation. Verify exact wording
             </button>
             <button
               onClick={handleExportAnalysisPDF}
-              className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-md text-[10px] font-bold bg-amber-500 hover:bg-amber-600 text-zinc-950 transition-all shadow-sm shadow-amber-500/10"
+              className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-md text-[10px] font-bold bg-indigo-600 hover:bg-indigo-700 text-white transition-all shadow-sm shadow-indigo-500/10"
             >
               <Download className="size-3" />
               <span>{t('download_pdf')}</span>
@@ -893,7 +899,8 @@ interface EvidenceGapAdvisorCardProps {
 }
 
 export function EvidenceGapAdvisorCard({ chat }: EvidenceGapAdvisorCardProps) {
-  const { t } = useChats();
+  const tkLang = chat.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
   const caseCategory = detectCaseCategory(chat.checklist, chat.messages);
   const gaps = calculateEvidenceGaps(caseCategory, chat.checklist);
   
@@ -924,7 +931,7 @@ export function EvidenceGapAdvisorCard({ chat }: EvidenceGapAdvisorCardProps) {
                 {gaps.missingEvidence.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-1.5 text-xs text-foreground font-semibold">
                     <span className="size-1.5 rounded-full bg-amber-500 shrink-0" />
-                    <span>{item}</span>
+                    <span>{t(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -936,11 +943,11 @@ export function EvidenceGapAdvisorCard({ chat }: EvidenceGapAdvisorCardProps) {
               <div className="space-y-2">
                 {gaps.recommendations.map((rec, idx) => (
                   <div key={idx} className="text-[11px] leading-normal bg-muted/30 p-2 rounded-md border border-border/40">
-                    <p className="font-semibold text-foreground text-xs">{rec.evidenceType}</p>
-                    <p className="text-muted-foreground mt-0.5">{rec.whyItMatters}</p>
+                    <p className="font-semibold text-foreground text-xs">{t(rec.evidenceType)}</p>
+                    <p className="text-muted-foreground mt-0.5">{t(rec.whyItMatters)}</p>
                     <div className="mt-1.5 flex items-start gap-1">
                       <span className="font-bold text-amber-500 shrink-0">{t('next_upload')}</span>
-                      <span className="text-foreground font-medium">{rec.nextUpload}</span>
+                      <span className="text-foreground font-medium">{t(rec.nextUpload)}</span>
                     </div>
                   </div>
                 ))}
@@ -971,11 +978,11 @@ export function EvidenceGapAdvisorCard({ chat }: EvidenceGapAdvisorCardProps) {
             <div className="flex items-center gap-1.5">
               <ChevronRight className="size-3.5 text-primary dark:text-amber-400 shrink-0 animate-ping" />
               <p className="text-xs font-bold text-primary dark:text-amber-400 leading-tight">
-                {nextActionInfo.action}
+                {t(nextActionInfo.action)}
               </p>
             </div>
             <p className="text-[11px] text-muted-foreground leading-normal mt-0.5 font-medium">
-              {nextActionInfo.reason}
+              {t(nextActionInfo.reason)}
             </p>
           </div>
         </div>

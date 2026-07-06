@@ -1,0 +1,26 @@
+{
+  "domain": "Employment",
+  "scenario": "normal",
+  "query": "Standard query for Employment with verified parties.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Parties: Rajesh Landlord and Suresh Tenant. Date: 01-Jan-2026. Value: Rs 45,000.",
+    "analysis": {
+      "summary": "Baseline document for Employment.",
+      "entities": {
+        "names": [
+          "Rajesh Landlord",
+          "Suresh Tenant"
+        ],
+        "amounts": [
+          "Rs 45,000"
+        ],
+        "depositValues": [
+          "Rs 45,000"
+        ]
+      },
+      "detectedDocType": "Employment Contract"
+    }
+  }
+}

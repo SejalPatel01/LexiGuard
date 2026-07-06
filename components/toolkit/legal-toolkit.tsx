@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { useChats, mergeExtractedEntities, mapLabelToCategory, detectCaseCategory } from '@/hooks/use-chats';
+import { translateKey } from '@/lib/translations';
 import { 
   EvidenceChecklistCard, 
   CaseStrengthCard, 
@@ -21,16 +22,9 @@ interface LegalToolkitProps {
 
 
 export function LegalToolkit({ isOpenOnMobile, setIsOpenOnMobile }: LegalToolkitProps) {
-  const { chats, activeChat, toggleChecklistItem, lastOrchestratorResponse, language, t } = useChats();
-
-
-
-  console.log('[DEBUG-TOOLKIT-RENDER] activeChat:', activeChat ? {
-    id: activeChat.id,
-    checklist: activeChat.checklist,
-    caseStrength: activeChat.caseStrength,
-    summary: activeChat.summary
-  } : null);
+  const { chats, activeChat, toggleChecklistItem, lastOrchestratorResponse } = useChats();
+  const tkLang = activeChat?.chatLanguage || 'en';
+  const t = (key: string) => translateKey(key, tkLang);
 
   if (!activeChat) {
     return (
@@ -171,7 +165,7 @@ export function LegalToolkit({ isOpenOnMobile, setIsOpenOnMobile }: LegalToolkit
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-border/60 shrink-0">
         <div className="flex items-center gap-2">
-          <Briefcase className="size-4.5 text-primary dark:text-amber-500" />
+          <Briefcase className="size-4.5 text-indigo-600 dark:text-purple-400" />
           <span className="text-sm font-bold text-foreground">{t('toolkit_dashboard')}</span>
         </div>
 
@@ -232,9 +226,9 @@ export function LegalToolkit({ isOpenOnMobile, setIsOpenOnMobile }: LegalToolkit
   return (
     <>
       {/* Desktop Toolkit (visible on xl screens) */}
-      <aside className="hidden xl:block w-80 shrink-0 h-full">
+      <div className="hidden xl:block w-full h-full">
         {toolkitContent}
-      </aside>
+      </div>
 
       {/* Mobile Drawer (visible on smaller screens when toggled) */}
       {isOpenOnMobile && (

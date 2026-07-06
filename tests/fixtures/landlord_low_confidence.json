@@ -1,0 +1,21 @@
+{
+  "domain": "Landlord",
+  "scenario": "low_confidence",
+  "query": "Dispute for Landlord containing secondary name Aakash.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Parties: Rajesh Landlord and Suresh Tenant. Side manager is Aakash.",
+    "analysis": {
+      "summary": "Low confidence document.",
+      "entities": {
+        "names": [
+          "Rajesh Landlord",
+          "Suresh Tenant",
+          "Aakash"
+        ]
+      },
+      "detectedDocType": "Rent Agreement"
+    }
+  }
+}

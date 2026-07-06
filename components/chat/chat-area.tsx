@@ -12,7 +12,8 @@ import {
   Paperclip, 
   Mic, 
   Briefcase,
-  X
+  X,
+  Home
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -20,12 +21,14 @@ interface ChatAreaProps {
   onToggleSidebarMobile: () => void;
   onToggleToolkitMobile: () => void;
   isToolkitOpenMobile: boolean;
+  onGoHome?: () => void;
 }
 
 export function ChatArea({ 
   onToggleSidebarMobile, 
   onToggleToolkitMobile,
-  isToolkitOpenMobile 
+  isToolkitOpenMobile,
+  onGoHome
 }: ChatAreaProps) {
   const { 
     activeChat, 
@@ -33,7 +36,6 @@ export function ChatArea({
     isTyping, 
     regenerateLastMessage,
     uploadAndAnalyzeFile,
-    language,
     t
   } = useChats();
   const [inputVal, setInputVal] = useState('');
@@ -41,8 +43,14 @@ export function ChatArea({
   const [isDragging, setIsDragging] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [showJumpButton, setShowJumpButton] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const shouldAutoScrollRef = useRef(true);
+  const prevMessagesLengthRef = useRef(0);
 
   // Speech Recognition States
   const [isListening, setIsListening] = useState(false);
@@ -61,8 +69,9 @@ export function ChatArea({
       recognition.continuous = true;
       recognition.interimResults = false;
       
-      // Auto select language from active UI language
-      const langCode = language === 'hi' ? 'hi-IN' : language === 'gu' ? 'gu-IN' : 'en-IN';
+      // Auto select language from the active chat's chatLanguage
+      const chatLang = activeChat?.chatLanguage || 'en';
+      const langCode = chatLang === 'hi' ? 'hi-IN' : chatLang === 'gu' ? 'gu-IN' : 'en-IN';
       recognition.lang = langCode;
 
       recognition.onstart = () => {
@@ -147,8 +156,8 @@ export function ChatArea({
   }, []);
 
   const processFile = (file: File) => {
-    if (file.size > 10 * 1024 * 1024) {
-      alert(t('file_too_large'));
+    if (file.size > 20 * 1024 * 1024) {
+      alert("Maximum upload size is 20 MB.");
       return;
     }
 
@@ -169,8 +178,17 @@ export function ChatArea({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
+    const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp'];
+    const allowedMimes = ['application/pdf', 'image/png', 'image/jpeg', 'image/webp'];
+
     Array.from(files).forEach((file) => {
-      processFile(file);
+      const dotIndex = file.name.lastIndexOf('.');
+      const ext = dotIndex !== -1 ? file.name.substring(dotIndex).toLowerCase() : '';
+      if (allowedExtensions.includes(ext) && (allowedMimes.includes(file.type) || (file.type === 'image/jpg' && ext === '.jpg'))) {
+        processFile(file);
+      } else {
+        alert("This file type is not supported.");
+      }
     });
     e.target.value = '';
   };
@@ -191,25 +209,103 @@ export function ChatArea({
 
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
-      const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg'];
+      const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.webp'];
+      const allowedMimes = ['application/pdf', 'image/png', 'image/jpeg', 'image/webp'];
+
       Array.from(files).forEach((file) => {
-        if (allowedTypes.includes(file.type)) {
+        const dotIndex = file.name.lastIndexOf('.');
+        const ext = dotIndex !== -1 ? file.name.substring(dotIndex).toLowerCase() : '';
+        if (allowedExtensions.includes(ext) && (allowedMimes.includes(file.type) || (file.type === 'image/jpg' && ext === '.jpg'))) {
           processFile(file);
         } else {
-          alert(t('unsupported_file'));
+          alert("This file type is not supported.");
         }
       });
     }
   };
 
-  // Auto scroll to bottom
+  // Scroll to bottom
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
+  // Handle active chat ID change
   useEffect(() => {
+    if (scrollContainerRef.current) {
+      // Snap instantly to bottom on chat switch
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
+    setShowJumpButton(false);
+    setUnreadCount(0);
+    shouldAutoScrollRef.current = true;
+    prevMessagesLengthRef.current = activeChat?.messages.length || 0;
+    
+    // Autofocus chat input
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [activeChat?.id, activeChat?.messages.length]);
+
+  // Handle message changes & typing status to conditionally scroll
+  useEffect(() => {
+    if (!activeChat) return;
+    const currentLen = activeChat.messages.length;
+    const prevLen = prevMessagesLengthRef.current;
+    prevMessagesLengthRef.current = currentLen;
+
+    if (currentLen > prevLen) {
+      const lastMsg = activeChat.messages[currentLen - 1];
+      if (lastMsg.role === 'user') {
+        // User sent a message: force auto-scroll to bottom
+        shouldAutoScrollRef.current = true;
+        setShowJumpButton(false);
+        setUnreadCount(0);
+        scrollToBottom();
+      } else {
+        // Assistant message arrived
+        if (shouldAutoScrollRef.current) {
+          scrollToBottom();
+        } else {
+          setUnreadCount((prev) => prev + 1);
+          setShowJumpButton(true);
+        }
+      }
+    } else if (isTyping) {
+      if (shouldAutoScrollRef.current) {
+        scrollToBottom();
+      }
+    }
+  }, [activeChat, isTyping]);
+
+  // Scroll event handler to detect user scrolling up/down
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+
+    if (isNearBottom) {
+      shouldAutoScrollRef.current = true;
+      setShowJumpButton(false);
+      setUnreadCount(0);
+    } else {
+      shouldAutoScrollRef.current = false;
+      setShowJumpButton(true);
+    }
+  };
+
+  const handleJumpToLatest = () => {
+    shouldAutoScrollRef.current = true;
+    setShowJumpButton(false);
+    setUnreadCount(0);
     scrollToBottom();
-  }, [activeChat?.messages, isTyping]);
+  };
 
   // Handle auto-expanding text area
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -239,14 +335,22 @@ export function ChatArea({
       stopListening();
     }
 
-    // Sequentially process each attachment
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const uploadedDocsList: any[] = [];
     for (const file of attachments) {
-      await uploadAndAnalyzeFile(file.name, file.type, file.base64);
+      try {
+        const docObj = await uploadAndAnalyzeFile(file.name, file.type, file.base64);
+        if (docObj) {
+          uploadedDocsList.push(docObj);
+        }
+      } catch (err) {
+        console.error('Failed to upload and analyze file:', err);
+      }
     }
 
-    // Send text prompt if present
+    // Send text prompt if present, forwarding the analyzed document list to bypass stale React state issues
     if (promptText) {
-      await sendMessage(promptText);
+      await sendMessage(promptText, uploadedDocsList.length > 0 ? uploadedDocsList : undefined);
     }
   };
 
@@ -265,8 +369,17 @@ export function ChatArea({
 
   if (!activeChat) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-8 bg-background text-center">
-        <Scale className="size-12 text-amber-500 mb-4 animate-pulse" />
+      <div className="flex-1 flex flex-col items-center justify-center p-8 bg-background text-center relative">
+        {onGoHome && (
+          <button
+            onClick={onGoHome}
+            className="absolute top-4 left-4 flex items-center gap-1.5 text-xs text-purple-700 dark:text-purple-300 font-bold px-3 py-1.5 rounded-full border border-purple-100/60 dark:border-purple-900/40 bg-purple-50/80 dark:bg-purple-950/30 backdrop-blur-sm shadow-sm hover:bg-purple-100 dark:hover:bg-purple-900/40 hover:scale-105 active:scale-95 transition-all duration-200"
+          >
+            <Home className="size-3.5" />
+            <span>Home</span>
+          </button>
+        )}
+        <Scale className="size-12 text-purple-600 dark:text-purple-400 mb-4 animate-pulse" />
         <h2 className="text-xl font-bold mb-2">{t('no_case_selected')}</h2>
         <p className="text-sm text-muted-foreground max-w-sm">
           {t('select_case_desc')}
@@ -288,6 +401,16 @@ export function ChatArea({
         
         {/* Left Side: Mobile Menu Trigger & Case Title */}
         <div className="flex items-center gap-3 overflow-hidden">
+          {onGoHome && (
+            <button
+              onClick={onGoHome}
+              className="flex items-center gap-1.5 text-xs text-purple-700 dark:text-purple-300 font-bold px-3 py-1.5 rounded-full border border-purple-100/60 dark:border-purple-900/40 bg-purple-50/80 dark:bg-purple-950/30 backdrop-blur-sm shadow-sm hover:bg-purple-100 dark:hover:bg-purple-900/40 hover:scale-105 active:scale-95 transition-all duration-200 mr-2 shrink-0 animate-fade-in"
+            >
+              <Home className="size-3.5" />
+              <span>Home</span>
+            </button>
+          )}
+          
           <button
             onClick={onToggleSidebarMobile}
             className="lg:hidden p-1.5 rounded-lg text-muted-foreground hover:bg-muted"
@@ -298,7 +421,7 @@ export function ChatArea({
           
           <div className="flex flex-col min-w-0">
             <h1 className="text-sm font-bold text-foreground truncate pr-2">
-              {activeChat.title}
+              {activeChat.title === 'New Case Inquiry' ? t('New Case Inquiry') : activeChat.title}
             </h1>
             <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
               {hasMessages ? t('incident_analysis') : t('case_setup_intake')}
@@ -313,8 +436,8 @@ export function ChatArea({
             className={cn(
               "xl:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-200",
               isToolkitOpenMobile 
-                ? "bg-primary/10 text-primary border-primary/20 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20" 
-                : "border-border text-muted-foreground hover:bg-muted"
+                ? "bg-primary/10 text-primary border-primary/20 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20" 
+                : "bg-muted text-muted-foreground border-border/80"
             )}
           >
             <Briefcase className="size-3.5" />
@@ -324,7 +447,11 @@ export function ChatArea({
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+      <div 
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative"
+      >
         {!hasMessages ? (
           
           /* Welcome Screen State */
@@ -332,12 +459,12 @@ export function ChatArea({
             
             {/* Logo/Hero Branding */}
             <div className="flex flex-col items-center text-center max-w-xl space-y-3">
-              <div className="flex items-center justify-center size-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 text-white shadow-xl shadow-amber-500/10 mb-2">
+              <div className="flex items-center justify-center size-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-orange-500 text-white shadow-xl shadow-purple-500/10 mb-2">
                 <Scale className="size-7" />
               </div>
               <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
                 {t('evaluate_dispute') + ' '}
-                <span className="bg-gradient-to-r from-amber-500 to-indigo-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-orange-600 via-amber-500 to-amber-400 bg-clip-text text-transparent">
                   {t('brand_title')}
                 </span>
               </h2>
@@ -345,16 +472,16 @@ export function ChatArea({
                 {t('empty_onboarding')}
               </p>
             </div>
-
+ 
             {/* Suggested Prompts Grid */}
             <div className="flex flex-col items-center w-full space-y-3">
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
-                <Sparkles className="size-3.5 text-amber-500" />
+                <Sparkles className="size-3.5 text-purple-600 dark:text-purple-400" />
                 {t('select_sample')}
               </span>
               <SuggestedPrompts onSelectPrompt={handleSelectPrompt} />
             </div>
-
+ 
           </div>
         ) : (
           
@@ -368,12 +495,12 @@ export function ChatArea({
                 onRegenerate={regenerateLastMessage}
               />
             ))}
-
+ 
             {/* Animated Typing Indicator */}
             {isTyping && (
               <div className="flex w-full gap-4 py-6 px-4 md:px-6 bg-muted/30 dark:bg-muted/10 border-b border-border/40">
                 <div className="flex gap-4 flex-row w-full max-w-4xl">
-                  <div className="size-8 rounded-lg shrink-0 flex items-center justify-center bg-gradient-to-tr from-amber-500 to-amber-600 text-white shadow-sm">
+                  <div className="size-8 rounded-lg shrink-0 flex items-center justify-center bg-gradient-to-tr from-purple-600 to-orange-500 text-white shadow-sm">
                     <Scale className="size-4" />
                   </div>
                   <div className="flex flex-col flex-1 space-y-1.5">
@@ -400,6 +527,20 @@ export function ChatArea({
         )}
       </div>
 
+      {/* Jump to Latest Floating Button */}
+      {showJumpButton && (
+        <button
+          onClick={handleJumpToLatest}
+          className="absolute bottom-[90px] left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 bg-white/95 dark:bg-zinc-900/95 text-primary dark:text-purple-400 border border-border/80 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 text-xs font-semibold backdrop-blur-md"
+        >
+          <span>
+            {unreadCount > 0
+              ? t('jump_latest_unread').replace('{count}', String(unreadCount))
+              : t('jump_latest_simple')}
+          </span>
+        </button>
+      )}
+
       {/* Input Box Footer bar */}
       <footer className="p-4 border-t border-border/80 bg-card/40 backdrop-blur-md shrink-0">
         
@@ -422,7 +563,7 @@ export function ChatArea({
           </div>
         )}
 
-        <div className="max-w-4xl mx-auto flex flex-col gap-2 bg-muted/50 dark:bg-muted/20 border border-border/80 rounded-xl p-2 focus-within:border-primary dark:focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-primary/20 transition-all duration-300">
+        <div className="max-w-4xl mx-auto flex flex-col gap-2 bg-muted/50 dark:bg-muted/20 border border-border/80 rounded-xl p-2 focus-within:border-purple-500 dark:focus-within:border-purple-500 focus-within:ring-1 focus-within:ring-purple-500/20 transition-all duration-300">
           
           {/* Staged Attachments Preview */}
           {pendingAttachments.length > 0 && (
@@ -432,7 +573,7 @@ export function ChatArea({
                   key={idx} 
                   className="flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-1.5 text-xs font-medium text-foreground shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-150"
                 >
-                  <Paperclip className="size-3.5 text-amber-500 shrink-0" />
+                  <Paperclip className="size-3.5 text-purple-600 dark:text-purple-400 shrink-0" />
                   <span className="truncate max-w-[150px]">{file.name}</span>
                   <button
                     onClick={() => {
@@ -455,7 +596,7 @@ export function ChatArea({
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}
-              accept=".pdf,image/png,image/jpeg,image/jpg"
+              accept=".pdf,image/png,image/jpeg,image/jpg,image/webp"
               multiple
               className="hidden"
             />
@@ -476,7 +617,7 @@ export function ChatArea({
               value={inputVal}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
-              placeholder={t('chat_placeholder') || "Ask NyayaAI about your legal issue..."}
+              placeholder={t('chat_placeholder') || "Ask LexiGuard about your legal issue..."}
               className="flex-1 resize-none bg-transparent py-2.5 px-1 max-h-[160px] min-h-[36px] text-sm text-foreground outline-none border-none custom-scrollbar placeholder:text-muted-foreground/60"
             />
 
@@ -502,7 +643,7 @@ export function ChatArea({
               className={cn(
                 "p-2 rounded-lg text-white shadow-md transition-all duration-200",
                 (inputVal.trim() || pendingAttachments.length > 0) && !isTyping
-                  ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 cursor-pointer shadow-amber-500/10"
+                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 cursor-pointer shadow-purple-500/10"
                   : "bg-muted-foreground/30 dark:bg-zinc-800 text-muted-foreground cursor-not-allowed shadow-none"
               )}
               title={t('send_message')}
@@ -521,13 +662,13 @@ export function ChatArea({
       {/* Drag & Drop Glassmorphic Overlay */}
       {isDragging && (
         <div 
-          className="absolute inset-0 bg-background/85 backdrop-blur-md border-4 border-dashed border-primary dark:border-amber-500 rounded-xl z-50 flex flex-col items-center justify-center animate-in fade-in duration-200"
+          className="absolute inset-0 bg-background/85 backdrop-blur-md border-4 border-dashed border-primary dark:border-purple-500 rounded-xl z-50 flex flex-col items-center justify-center animate-in fade-in duration-200"
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
           <div className="flex flex-col items-center gap-3 text-center p-6 bg-card border border-border/80 rounded-2xl shadow-xl max-w-sm">
-            <div className="size-16 rounded-full bg-primary/10 dark:bg-amber-500/10 flex items-center justify-center text-primary dark:text-amber-500">
+            <div className="size-16 rounded-full bg-primary/10 dark:bg-purple-500/10 flex items-center justify-center text-primary dark:text-purple-500">
               <Paperclip className="size-8" />
             </div>
             <h3 className="text-sm font-bold text-foreground">{t('drop_to_simplify')}</h3>

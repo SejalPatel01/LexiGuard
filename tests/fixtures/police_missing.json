@@ -1,0 +1,17 @@
+{
+  "domain": "Police",
+  "scenario": "missing",
+  "query": "Unverified claim without bank proof or secondary files for Police.",
+  "doc": {
+    "name": "contract.pdf",
+    "type": "application/pdf",
+    "text": "Simple document stub.",
+    "analysis": {
+      "summary": "Stub document.",
+      "entities": {
+        "names": []
+      },
+      "detectedDocType": "Other"
+    }
+  }
+}

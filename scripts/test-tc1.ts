@@ -11,19 +11,25 @@ async function testTC1() {
   console.log("Input Query:", query);
 
   const response = await runLegalAssessment(query, []);
+  if ('isBlocked' in response && response.isBlocked) {
+    console.error("Pipeline failed with security block:", response.reason);
+    process.exit(1);
+  }
   if ('error' in response) {
     console.error("Pipeline failed with error:", response.error);
     process.exit(1);
   }
 
+  const success = response as any;
+
   console.log("\n--- 1. Classification ---");
-  console.log("Category:", response.category);
+  console.log("Category:", success.category);
 
   console.log("\n--- 2. Advice Generation ---");
-  console.log("Advice Text Summary:\n", response.advice.text.substring(0, 400) + "...");
+  console.log("Advice Text Summary:\n", success.advice.text.substring(0, 400) + "...");
 
   console.log("\n--- 3. Evidence Detection & 4. Checklist Generation ---");
-  console.log("Suggested Checklist from Orchestrator:", response.actions.checklist);
+  console.log("Suggested Checklist from Orchestrator:", success.actions.checklist);
 
   // Map checklist to standard checklist layout
   const initialChecklist: CaseChecklistItem[] = [
@@ -33,7 +39,7 @@ async function testTC1() {
     { id: 'chk-n-4', label: 'Government ID & Proof of Address', checked: false }
   ];
 
-  const mappedChecklist = response.actions.checklist.map((label, idx) => {
+  const mappedChecklist = success.actions.checklist.map((label: string, idx: number) => {
     const existing = initialChecklist.find(
       (item) => item.label.toLowerCase() === label.toLowerCase()
     );
@@ -58,10 +64,10 @@ async function testTC1() {
   console.log("Risk Factors:", verified.caseStrength.riskFactors);
 
   console.log("\n--- 6. Timeline Generation ---");
-  console.log("Timeline Events:", response.actions.timeline);
+  console.log("Timeline Events:", success.actions.timeline);
 
   console.log("\n--- 7. Generated Documents ---");
-  console.log("Draft Documents:", response.actions.documents.map(d => ({
+  console.log("Draft Documents:", success.actions.documents.map((d: any) => ({
     title: d.title,
     type: d.type,
     previewLength: d.previewText.length
