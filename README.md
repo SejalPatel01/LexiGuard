@@ -21,7 +21,7 @@ Empowering citizens with AI-driven legal guidance through a secure, intelligent,
 
 <br>
 
-
+---
 
 # 🌍 Overview
 
@@ -98,7 +98,7 @@ All of this happens through a clean and intuitive Conversational AI interface.
 
 
 <p align="center">
-  <img src="Assets/Screenshots/landing_page.png" width="100%"/>
+  <img src="Assets/Screenshots/landing_page.png" width="85%"/>
 </p>
 
 <br>
@@ -110,7 +110,7 @@ All of this happens through a clean and intuitive Conversational AI interface.
 ---
 
 <p align="center">
- <img src="Assets/Screenshots/workspace.png" width="100%"/>
+ <img src="Assets/Screenshots/workspace.png" width="85%"/>
 
 </p>
 
@@ -119,6 +119,8 @@ All of this happens through a clean and intuitive Conversational AI interface.
 > **AI Workspace** — A GPT-style interface where users interact with multiple AI agents to analyze legal problems, upload documents, receive case insights, generate action plans, and prepare legal drafts.
 
 <br>
+
+---
 
 # 🚀 Why LexiGuard?
 
@@ -157,6 +159,7 @@ while keeping the user experience simple and intuitive.
 
 <br>
 
+---
 
 # 🤖 Specialized AI Agents
 
@@ -173,12 +176,12 @@ Together, these specialized agents collaborate through **Google ADK** and **Goog
 
 <br>
 
-
+---
 
 # 🏗️ System Architecture
 
 <p align="center">
-  <img src="Assets/Screenshots/architecture.png" width="100%"/>
+  <img src="Assets/Screenshots/architecture.png" width="85%"/>
 </p>
 
 LexiGuard follows a **Multi-Agent AI Architecture**, where multiple specialized AI agents collaborate to solve a user's legal problem. Instead of relying on a single AI model, each agent is responsible for a dedicated task, resulting in more accurate, modular, and explainable responses.
@@ -192,7 +195,7 @@ Google **Gemini** serves as the reasoning engine, while **Google Agent Developme
 # 🔄 User Workflow
 
 <p align="center">
-  <img src="Assets/Screenshots/workflow.png" width="100%"/>
+  <img src="Assets/Screenshots/workflow.png" width="85%"/>
 </p>
 
 LexiGuard transforms complex legal processes into a simple guided workflow.
@@ -230,12 +233,14 @@ Using MCP provides several advantages:
 
 The web application and external MCP clients both consume the same underlying legal services, ensuring consistent behavior across platforms.
 
+<br>
+
 ---
 
 # 🔒 Security by Design
 
 <p align="center">
-  <img src="Assets/Screenshots/security.png" width="100%"/>
+  <img src="Assets/Screenshots/security.png" width="85%"/>
 </p>
 
 Security is a core design principle of LexiGuard. Every legal query passes through multiple protection layers before AI processing, ensuring safe, reliable, and privacy-focused interactions.
@@ -255,6 +260,8 @@ Security is a core design principle of LexiGuard. Every legal query passes throu
 > **LexiGuard does not permanently store user conversations or uploaded legal documents. All processing is designed with privacy and security as core principles.**
 
 <br>
+
+---
 
 # 🧪 Validation & Testing
 
@@ -372,8 +379,10 @@ Although LexiGuard already provides a complete legal assistance workflow, future
 - 🌐 Expanded multilingual support for wider accessibility.
 - 🤝 Integration with government legal service portals and public legal resources.
 - 📂 Secure encrypted cloud storage for user-managed legal documents.
+  
 <br>
 
+---
 
 # 🏆 Built as the Capstone Project for the Google × Kaggle AI Agents Intensive Course 
 
