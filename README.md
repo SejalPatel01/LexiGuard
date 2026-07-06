@@ -9,17 +9,7 @@ Empowering citizens with AI-driven legal guidance through a secure, intelligent,
 </p>
 
 
-<p align="center">
-
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)]()
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)]()
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)]()
-[![Google Gemini](https://img.shields.io/badge/Google-Gemini-8E75FF?style=for-the-badge&logo=google)]()
-[![Google ADK](https://img.shields.io/badge/Google-ADK-blue?style=for-the-badge)]()
-[![MCP](https://img.shields.io/badge/MCP-Integrated-purple?style=for-the-badge)]()
-[![Hackathon](https://img.shields.io/badge/Google-Agentic_AI_Hackathon-orange?style=for-the-badge)]()
-
-</p>
+<br>
 
 ---
 
@@ -29,6 +19,7 @@ Empowering citizens with AI-driven legal guidance through a secure, intelligent,
 
 [Watch on YouTube](https://youtu.be/VtlNR6rMPrU)
 
+<br>
 ---
 
 # 🌍 Overview
@@ -38,6 +29,8 @@ Legal systems are often difficult to understand for ordinary citizens. Complex t
 **LexiGuard** bridges this gap using a secure Multi-Agent AI architecture powered by **Google Gemini** and **Google ADK**. Instead of acting as a generic chatbot, LexiGuard intelligently coordinates multiple specialized AI agents that analyze legal issues, simplify legal documents, estimate case strength, generate personalized action plans, verify evidence, and prepare legal drafts.
 
 The platform is designed to make legal guidance **simple, secure, accessible, and actionable** while maintaining transparency and user privacy.
+
+<br>
 
 ---
 
@@ -55,6 +48,8 @@ Common challenges include:
 - 👩‍⚖️ Limited access to professional legal assistance
 
 For many first-time users, navigating legal systems becomes overwhelming before they even know where to begin.
+
+<br>
 
 ---
 
@@ -76,6 +71,8 @@ A team of specialized AI agents then collaborates behind the scenes to:
 
 All of this happens through a clean and intuitive Conversational AI interface.
 
+<br>
+
 ---
 
 # ✨ Key Features
@@ -92,8 +89,9 @@ All of this happens through a clean and intuitive Conversational AI interface.
 | 🔒 Security Layer | Prompt injection detection, input validation, and secure output masking. |
 | 🔌 MCP Integration | Exposes legal capabilities through a standalone Model Context Protocol server. |
 
----
+<br>
 
+---
 
 # 🖼 Product Preview
 
@@ -102,9 +100,11 @@ All of this happens through a clean and intuitive Conversational AI interface.
   <img src="Assets/Screenshots/landing_page.png" width="100%"/>
 </p>
 
-
+<br>
 
 > **LexiGuard Landing Page** — A modern SaaS-style interface introducing the platform, its workflow, security philosophy, and key capabilities before entering the AI workspace.
+
+<br>
 
 ---
 
@@ -113,8 +113,11 @@ All of this happens through a clean and intuitive Conversational AI interface.
 
 </p>
 
+<br>
+
 > **AI Workspace** — A GPT-style interface where users interact with multiple AI agents to analyze legal problems, upload documents, receive case insights, generate action plans, and prepare legal drafts.
 
+<br>
 ---
 
 # 🚀 Why LexiGuard?
@@ -152,6 +155,7 @@ while keeping the user experience simple and intuitive.
 | Icons | Lucide React |
 | Markdown Rendering | React Markdown |
 
+<br>
 ---
 
 # 🤖 Specialized AI Agents
@@ -167,6 +171,8 @@ LexiGuard follows a Multi-Agent architecture where each AI agent performs a dedi
 
 Together, these specialized agents collaborate through **Google ADK** and **Google Gemini** to deliver structured, explainable, and context-aware legal assistance.
 
+<br>
+
 ---
 
 # 🏗️ System Architecture
@@ -181,7 +187,7 @@ Google **Gemini** serves as the reasoning engine, while **Google Agent Developme
 
     
 
-
+<br>
 
 # 🔄 User Workflow
 
@@ -191,6 +197,7 @@ Google **Gemini** serves as the reasoning engine, while **Google Agent Developme
 
 LexiGuard transforms complex legal processes into a simple guided workflow.
 
+<br>
 
 # 🔌 Model Context Protocol (MCP)
 
@@ -223,6 +230,7 @@ Using MCP provides several advantages:
 
 The web application and external MCP clients both consume the same underlying legal services, ensuring consistent behavior across platforms.
 
+<br>
 ---
 
 # 🔒 Security by Design
@@ -232,6 +240,7 @@ The web application and external MCP clients both consume the same underlying le
 </p>
 
 Security is a core design principle of LexiGuard. Every legal query passes through multiple protection layers before AI processing, ensuring safe, reliable, and privacy-focused interactions.
+<br>
 
 ### Security Highlights
 
@@ -246,6 +255,7 @@ Security is a core design principle of LexiGuard. Every legal query passes throu
 
 > **LexiGuard does not permanently store user conversations or uploaded legal documents. All processing is designed with privacy and security as core principles.**
 
+<br>
 ---
 
 # 🧪 Validation & Testing
@@ -264,7 +274,7 @@ To improve reliability, LexiGuard was validated through comprehensive end-to-end
 - ✅ Production build verification
 
 These validation checks help ensure accurate legal reasoning, consistent entity mapping, reliable draft generation, and stable multi-agent orchestration.
-
+<br>
 ---
 
 # 📂 Project Structure
@@ -364,7 +374,7 @@ Although LexiGuard already provides a complete legal assistance workflow, future
 - 🌐 Expanded multilingual support for wider accessibility.
 - 🤝 Integration with government legal service portals and public legal resources.
 - 📂 Secure encrypted cloud storage for user-managed legal documents.
-
+<br>
 ---
 
 # 🏆 Built as the Capstone Project for the Google × Kaggle AI Agents Intensive Course 
@@ -372,7 +382,7 @@ Although LexiGuard already provides a complete legal assistance workflow, future
 LexiGuard is a **Multi-Agent AI Legal Assistant** developed as the capstone project following the **Google Kaggle 5-Day Gen AI Intensive Course**, and built for the **Google × Kaggle AI Agents Capstone**.
 
 Powered by **Google Gemini**, **Google Agent Development Kit (ADK)**, and **Model Context Protocol (MCP)**, LexiGuard demonstrates how specialized AI agents can collaborate to deliver secure, explainable, and actionable legal assistance through a modern, real-world architecture.
-
+<br>
 
 ---
 
