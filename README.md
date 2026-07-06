@@ -156,7 +156,7 @@ while keeping the user experience simple and intuitive.
 | Markdown Rendering | React Markdown |
 
 <br>
----
+
 
 # 🤖 Specialized AI Agents
 
@@ -380,6 +380,7 @@ Although LexiGuard already provides a complete legal assistance workflow, future
 LexiGuard is a **Multi-Agent AI Legal Assistant** developed as the capstone project following the **Google Kaggle 5-Day Gen AI Intensive Course**, and built for the **Google × Kaggle AI Agents Capstone**.
 
 Powered by **Google Gemini**, **Google Agent Development Kit (ADK)**, and **Model Context Protocol (MCP)**, LexiGuard demonstrates how specialized AI agents can collaborate to deliver secure, explainable, and actionable legal assistance through a modern, real-world architecture.
+
 <br>
 
 ---
