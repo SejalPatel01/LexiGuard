@@ -172,7 +172,7 @@ Together, these specialized agents collaborate through **Google ADK** and **Goog
 # 🏗️ System Architecture
 
 <p align="center">
-  <img src="Assets/Screenshots/image_1.png" width="100%"/>
+  <img src="Assets/Screenshots/architecture.png" width="100%"/>
 </p>
 
 LexiGuard follows a **Multi-Agent AI Architecture**, where multiple specialized AI agents collaborate to solve a user's legal problem. Instead of relying on a single AI model, each agent is responsible for a dedicated task, resulting in more accurate, modular, and explainable responses.
@@ -186,7 +186,7 @@ Google **Gemini** serves as the reasoning engine, while **Google Agent Developme
 # 🔄 User Workflow
 
 <p align="center">
-  <img src="Assets/Screenshots/image_2.png" width="100%"/>
+  <img src="Assets/Screenshots/workflow.png" width="100%"/>
 </p>
 
 LexiGuard transforms complex legal processes into a simple guided workflow.
@@ -228,7 +228,7 @@ The web application and external MCP clients both consume the same underlying le
 # 🔒 Security by Design
 
 <p align="center">
-  <img src="Assets/Screenshots/image_4.png" width="100%"/>
+  <img src="Assets/Screenshots/security.png" width="100%"/>
 </p>
 
 Security is a core design principle of LexiGuard. Every legal query passes through multiple protection layers before AI processing, ensuring safe, reliable, and privacy-focused interactions.
