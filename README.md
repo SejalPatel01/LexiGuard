@@ -20,7 +20,8 @@ Empowering citizens with AI-driven legal guidance through a secure, intelligent,
 [Watch on YouTube](https://youtu.be/VtlNR6rMPrU)
 
 <br>
----
+
+
 
 # 🌍 Overview
 
@@ -118,7 +119,6 @@ All of this happens through a clean and intuitive Conversational AI interface.
 > **AI Workspace** — A GPT-style interface where users interact with multiple AI agents to analyze legal problems, upload documents, receive case insights, generate action plans, and prepare legal drafts.
 
 <br>
----
 
 # 🚀 Why LexiGuard?
 
@@ -173,7 +173,7 @@ Together, these specialized agents collaborate through **Google ADK** and **Goog
 
 <br>
 
----
+
 
 # 🏗️ System Architecture
 
@@ -230,7 +230,6 @@ Using MCP provides several advantages:
 
 The web application and external MCP clients both consume the same underlying legal services, ensuring consistent behavior across platforms.
 
-<br>
 ---
 
 # 🔒 Security by Design
@@ -256,7 +255,6 @@ Security is a core design principle of LexiGuard. Every legal query passes throu
 > **LexiGuard does not permanently store user conversations or uploaded legal documents. All processing is designed with privacy and security as core principles.**
 
 <br>
----
 
 # 🧪 Validation & Testing
 
@@ -274,7 +272,7 @@ To improve reliability, LexiGuard was validated through comprehensive end-to-end
 - ✅ Production build verification
 
 These validation checks help ensure accurate legal reasoning, consistent entity mapping, reliable draft generation, and stable multi-agent orchestration.
-<br>
+
 ---
 
 # 📂 Project Structure
@@ -375,7 +373,7 @@ Although LexiGuard already provides a complete legal assistance workflow, future
 - 🤝 Integration with government legal service portals and public legal resources.
 - 📂 Secure encrypted cloud storage for user-managed legal documents.
 <br>
----
+
 
 # 🏆 Built as the Capstone Project for the Google × Kaggle AI Agents Intensive Course 
 
